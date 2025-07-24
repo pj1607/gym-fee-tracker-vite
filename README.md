@@ -1,6 +1,7 @@
 # Gym Fee Tracker
 
-Full-stack web app to manage gym memberships, automate monthly fee tracking, and streamline member payment statuses.
+Track your gym members and their payment status.
+Go digital — skip the register!
 
 ## 🔍 Features
 - 📝 Member registration
