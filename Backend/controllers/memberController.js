@@ -27,9 +27,7 @@ export const allMembers = async (req, res) => {
     const totalMember = updatedMembers.length;
 
     res.status(200).json({
-      message: updatedMembers.length
-        ? "Fetched Members Successfully"
-        : "No any Member Registered yet",
+     message: updatedMembers.length === 0 ? "No any Member Registered yet" : undefined,
       members: updatedMembers,
       totalMembers: totalMember,
     });
