@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Grid, Paper ,CircularProgress} from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Box, Typography, Grid, Paper ,CircularProgress,IconButton,Tooltip as MuiTooltip, } from '@mui/material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import GridViewIcon from '@mui/icons-material/GridView';
+
 import {
   PieChart,
   Pie,
   Cell,
-  Tooltip,
   ResponsiveContainer,
   Legend,
+  Tooltip as RechartsTooltip
 } from 'recharts';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -50,16 +54,25 @@ const Userpage = () => {
 
   return (
     <Box sx={{ p: 4, minHeight: '100vh' }}>
-     <AnimatedTypography
-      variant="h4"
-      gutterBottom
-      sx={{ color: '#ebe0e0ff' }}
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-    >
-      Hello{username ? `, ${username}` : ''}!
-    </AnimatedTypography>
+     <Box display="flex" alignItems="center" gap={1}>
+  <AnimatedTypography
+    variant="h4"
+    gutterBottom
+    sx={{ color: '#ebe0e0ff' }}
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, ease: 'easeOut' }}
+  >
+    Hello{username ? `, ${username}` : ''}!
+  </AnimatedTypography>
+
+  <MuiTooltip title="Go to Dashboard">
+    <IconButton component={Link} to="/dashboard" sx={{ color: '#ebe0e0ff', mt: '-4px' }}>
+      <DashboardIcon  fontSize="large" />
+    </IconButton>
+  </MuiTooltip>
+</Box>
+
       <Typography variant="subtitle1" gutterBottom sx={{ color: '#8c8b8bff' }}>
         Track your gym members and their payment status. Go digital — skip the register!
       </Typography>
@@ -122,7 +135,7 @@ const Userpage = () => {
                     <Cell key={`cell-${index}`} fill={COLORS[index]} />
                   ))}
                 </Pie>
-                <Tooltip
+                <RechartsTooltip
                   contentStyle={{
                     backgroundColor: 'white',
                     borderColor: '#8B0000',
