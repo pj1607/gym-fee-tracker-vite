@@ -47,10 +47,18 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
      e.preventDefault();
+
 try {
+  const trimmedEmail = formData.email.trim();
+const trimmedUsername = formData.username.trim();
+
     const response = await axios.post(
        `${API}/auth/signup`,
-      formData,
+       {
+  email: trimmedEmail,
+  username: trimmedUsername,
+  password,
+},
       { withCredentials: true }
     );
 
