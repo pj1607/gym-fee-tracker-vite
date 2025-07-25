@@ -43,6 +43,9 @@ const [editModalOpen, setEditModalOpen] = React.useState(false);
 const [selectedMember, setSelectedMember] = React.useState(null);
 
 const [loading, setLoading] = React.useState(false);
+const [loadingId, setLoadingId] = React.useState(null);
+const [loadingType, setLoadingType] = React.useState('');
+
 
 
 const handleEditMember = (member) => {
@@ -120,7 +123,8 @@ React.useEffect(() => {
 
 const markAsPaid = async (id) => {
   try {
-    setLoading(true);
+     setLoadingId(id);
+    setLoadingType('pay');
     const res = await axios.put(
       `${API}/members/${id}/pay`,
       {},
@@ -148,15 +152,17 @@ const markAsPaid = async (id) => {
        toast.error(errormessage);
     
   }
-   finally {
-    setLoading(false); 
+    finally {
+    setLoadingId(null);
+    setLoadingType('');
   }
 };
 
 
   const handleUndoMarkAsPaid = async (id) => {
   try {
-    setLoading(true);
+      setLoadingId(id);
+    setLoadingType('undo');
     const res = await axios.put(
       `${API}/members/${id}/undo`,
       {},
@@ -186,14 +192,16 @@ const markAsPaid = async (id) => {
     toast.error(errormessage);
   }
   finally {
-    setLoading(false); 
+    setLoadingId(null);
+    setLoadingType('');
   }
 };
 
 
  const handleDeleteMember = async (id) => {
   try {
-    setLoading(true);
+ setLoadingId(id);
+    setLoadingType('delete');
     await axios.delete(`${API}/members/${id}`, {
       withCredentials: true,
     });
@@ -209,9 +217,9 @@ const markAsPaid = async (id) => {
     toast.error(errormessage);
   }
    finally {
-    setLoading(false); 
+    setLoadingId(null);
+    setLoadingType('');}
   }
-};
 
 const handleUpdateMember = async (updatedData) => {
   try {
@@ -294,43 +302,54 @@ const handleUpdateMember = async (updatedData) => {
       sortable: false,
       renderCell: ({ row }) => (
         <Box display="flex" gap={1}>
-          {row.status === 'Unpaid' ? (
-            <Button
-              variant="contained"
-              size="small"
-             onClick={() => markAsPaid(row.id)}   
-              startIcon={<CurrencyRupeeIcon />}
-              sx={{
-                backgroundColor: '#4caf50',
-                color: '#fff',
-                '&:hover': {
-                  backgroundColor: '#388e3c',
-                },
-                textTransform: 'none',
-                fontWeight: 'bold',
-              }}
-            >
-               {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Mark as Paid'} 
-            </Button>
-          ) : (
-            <Button
-              size="small"
-              onClick={() => handleUndoMarkAsPaid(row.id)}
-              startIcon={<UndoIcon />}
-              sx={{
-                color: 'white',
-                borderColor: '#fbc02d',
-                textTransform: 'none',
-                fontWeight: 'bold',
-                '&:hover': {
-                  backgroundColor: '#8B0000',
-                  color: 'white',
-                },
-              }}
-            >
-              {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Undo'}
-            </Button>
-          )}
+         {row.status === 'Unpaid' ? (
+  <Button
+    variant="contained"
+    size="small"
+    onClick={() => markAsPaid(row.id)}
+    startIcon={
+      loadingId === row.id && loadingType === 'pay' ? (
+        <CircularProgress size={18} sx={{ color: 'white' }} />
+      ) : (
+        <CurrencyRupeeIcon />
+      )
+    }
+    sx={{
+      backgroundColor: '#4caf50',
+      color: '#fff',
+      textTransform: 'none',
+      fontWeight: 'bold',
+      '&:hover': {
+        backgroundColor: '#388e3c',
+      },
+    }}
+  >
+    {loadingId === row.id && loadingType === 'pay' ? 'Processing' : 'Mark as Paid'}
+  </Button>
+) : (
+  <Button
+    size="small"
+    onClick={() => handleUndoMarkAsPaid(row.id)}
+    startIcon={
+      loadingId === row.id && loadingType === 'undo' ? (
+        <CircularProgress size={18} sx={{ color: 'white' }} />
+      ) : (
+        <UndoIcon />
+      )
+    }
+    sx={{
+      color: 'white',
+      textTransform: 'none',
+      fontWeight: 'bold',
+      '&:hover': {
+        backgroundColor: '#8B0000',
+      },
+    }}
+  >
+    {loadingId === row.id && loadingType === 'undo' ? 'Reverting' : 'Undo'}
+  </Button>
+)}
+
         </Box>
       ),
     },
@@ -342,17 +361,22 @@ const handleUpdateMember = async (updatedData) => {
       flex: 1,
       sortable: false,
       renderCell: ({ row }) => (
-        <Button
-          onClick={() => handleDeleteMember(row.id)}
-          sx={{
-            '&:hover': {
-              backgroundColor: '#8B0000',
-              color: 'white',
-            },
-          }}
-        >
-            {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : <DeleteForeverIcon /> }
-        </Button>
+       <Button
+  onClick={() => handleDeleteMember(row.id)}
+  sx={{
+    '&:hover': {
+      backgroundColor: '#8B0000',
+      color: 'white',
+    },
+  }}
+>
+  {loadingId === row.id && loadingType === 'delete' ? (
+    <CircularProgress size={18} sx={{ color: 'white' }} />
+  ) : (
+    <DeleteForeverIcon />
+  )}
+</Button>
+
       ),
     },
         {
