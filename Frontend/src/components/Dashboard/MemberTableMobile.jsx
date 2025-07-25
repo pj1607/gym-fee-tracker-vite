@@ -68,6 +68,7 @@ const MemberTableMobile = () => {
 
   const handleMarkAsPaid = async (id) => {
     try {
+       setLoading(true)
       const res = await axios.put(
         `${API}/${id}/pay`,
         {},
@@ -93,11 +94,15 @@ const MemberTableMobile = () => {
 
     toast.error(errormessage);
   }
+  finally {
+    setLoading(false);
+  }
 
   };
 
   const handleUndo = async (id) => {
     try {
+       setLoading(true)
       const res = await axios.put(
         `${API}/members/${id}/undo`,
         {},
@@ -125,11 +130,15 @@ const MemberTableMobile = () => {
 
     toast.error(errormessage);
   }
+   finally {
+    setLoading(false);
+  }
 
   };
 
   const handleDelete = async (id) => {
     try {
+       setLoading(true)
       await axios.delete( `${API}/members/${id}`, {
         withCredentials: true,
       });
@@ -141,6 +150,9 @@ const MemberTableMobile = () => {
       'Failed to delete member';
 
     toast.error(errormessage);
+  }
+   finally {
+    setLoading(false);
   }
 
   };
@@ -157,6 +169,7 @@ const MemberTableMobile = () => {
 
   const handleUpdateMember = async (updatedData) => {
     try {
+       setLoading(true)
       const res = await axios.put(
         `${API}/${updatedData.id}`,
         updatedData,
@@ -177,6 +190,9 @@ const MemberTableMobile = () => {
         'Failed to update member';
       toast.error(errMsg);
     }
+    finally {
+    setLoading(false);
+  }
   };
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -307,7 +323,7 @@ const MemberTableMobile = () => {
                 startIcon={<CurrencyRupeeIcon />}
                 sx={{ backgroundColor: '#4caf50', color: '#fff' }}
               >
-                Mark as Paid
+               {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Mark as Paid'} 
               </Button>
             ) : (
               <Button
@@ -316,7 +332,8 @@ const MemberTableMobile = () => {
                 startIcon={<UndoIcon />}
                 sx={{ color: 'white' }}
               >
-                Undo
+                 {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Undo'}
+                            
               </Button>
             )}
 
@@ -326,7 +343,7 @@ const MemberTableMobile = () => {
               startIcon={<DeleteForeverIcon />}
               sx={{ color: 'white' }}
             >
-              Delete
+                {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : <DeleteForeverIcon /> }
             </Button>
 
             <Button
@@ -351,6 +368,7 @@ const MemberTableMobile = () => {
 
       {/* Edit Member Modal */}
       <EditMemberModal
+       loading={loading}
         open={editModalOpen}
         handleClose={handleCloseEditModal}
         member={selectedMember}

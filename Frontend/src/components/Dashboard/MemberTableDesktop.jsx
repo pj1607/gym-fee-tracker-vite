@@ -120,6 +120,7 @@ React.useEffect(() => {
 
 const markAsPaid = async (id) => {
   try {
+    setLoading(true);
     const res = await axios.put(
       `${API}/members/${id}/pay`,
       {},
@@ -147,11 +148,15 @@ const markAsPaid = async (id) => {
        toast.error(errormessage);
     
   }
+   finally {
+    setLoading(false); 
+  }
 };
 
 
   const handleUndoMarkAsPaid = async (id) => {
   try {
+    setLoading(true);
     const res = await axios.put(
       `${API}/members/${id}/undo`,
       {},
@@ -180,11 +185,15 @@ const markAsPaid = async (id) => {
 
     toast.error(errormessage);
   }
+  finally {
+    setLoading(false); 
+  }
 };
 
 
  const handleDeleteMember = async (id) => {
   try {
+    setLoading(true);
     await axios.delete(`${API}/members/${id}`, {
       withCredentials: true,
     });
@@ -198,6 +207,9 @@ const markAsPaid = async (id) => {
       'Failed to delete member';
 
     toast.error(errormessage);
+  }
+   finally {
+    setLoading(false); 
   }
 };
 
@@ -298,7 +310,7 @@ const handleUpdateMember = async (updatedData) => {
                 fontWeight: 'bold',
               }}
             >
-              Mark as Paid
+               {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Mark as Paid'} 
             </Button>
           ) : (
             <Button
@@ -316,7 +328,7 @@ const handleUpdateMember = async (updatedData) => {
                 },
               }}
             >
-              Undo
+              {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Undo'}
             </Button>
           )}
         </Box>
@@ -339,7 +351,7 @@ const handleUpdateMember = async (updatedData) => {
             },
           }}
         >
-          <DeleteForeverIcon />
+            {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : <DeleteForeverIcon /> }
         </Button>
       ),
     },

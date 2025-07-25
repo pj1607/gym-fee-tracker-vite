@@ -6,7 +6,7 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
-  Legend,
+  Legend,CircularProgress
 } from 'recharts';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -16,10 +16,12 @@ const API = import.meta.env.VITE_API_URL;
 
 const Userpage = () => {
   const [summary, setSummary] = useState({ total: 0, paid: 0, unpaid: 0 });
+   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSummary = async () => {
       try {
+          setLoading(true);
         const res = await axios.get( `${API}/members/summary`, {
   withCredentials: true
 });
@@ -27,6 +29,9 @@ const Userpage = () => {
       } catch (error) {
         console.error('Failed to fetch summary:', error);
       }
+       finally {
+    setLoading(false); 
+  }
     };
 
     fetchSummary();
@@ -72,7 +77,7 @@ const Userpage = () => {
             }}
           >
             <Typography variant="h6">Total Members</Typography>
-            <Typography variant="h3" sx={{ color: '#B2ACAC' }}>{totalUsers}</Typography>
+            <Typography variant="h3" sx={{ color: '#B2ACAC' }}>  {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : {totalUsers}}</Typography>
           </Paper>
         </Grid>
 
