@@ -31,7 +31,9 @@ const handleLogout = async () => {
   try {
      setLoading(true); 
     await axios.post( `${API}/auth/logout`, {}, {
-      withCredentials: true,
+      headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  },
     });
 
     logout(); 

@@ -42,7 +42,9 @@ const [loadingType, setLoadingType] = React.useState('');
     try {
        setLoading(true);
       const res = await axios.get(`${API}/members/all-members`, {
-        withCredentials: true,
+        headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  },
       });
       setData(
         res.data.members.map((m) => ({
@@ -76,7 +78,9 @@ const [loadingType, setLoadingType] = React.useState('');
       const res = await axios.put(
         `${API}/members/${id}/pay`,
         {},
-        { withCredentials: true }
+        { headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  } }
       );
       setData((prev) =>
         prev.map((m) =>
@@ -112,7 +116,9 @@ const [loadingType, setLoadingType] = React.useState('');
       const res = await axios.put(
         `${API}/members/${id}/undo`,
         {},
-        { withCredentials: true }
+        { headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  } }
       );
       setData((prev) =>
         prev.map((m) =>
@@ -147,7 +153,9 @@ const [loadingType, setLoadingType] = React.useState('');
     setLoadingId(id);
     setLoadingType('delete');
       await axios.delete( `${API}/members/${id}`, {
-        withCredentials: true,
+        headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  },
       });
       setData((prev) => prev.filter((m) => m._id !== id));
     }catch (error) {
@@ -181,7 +189,9 @@ const [loadingType, setLoadingType] = React.useState('');
       const res = await axios.put(
          `${API}/members/${updatedData.id}`,
         updatedData,
-        { withCredentials: true }
+        { headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  } }
       );
 
       setData((prev) =>

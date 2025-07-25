@@ -57,7 +57,9 @@ const Login = () => {
       email: trimmedEmail,
       password: trimmedPassword,
     },
-      { withCredentials: true }
+      { headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  } }
     );
     
      const { token, username } = response.data.data;

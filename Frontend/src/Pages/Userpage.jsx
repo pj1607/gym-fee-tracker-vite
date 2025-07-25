@@ -27,7 +27,9 @@ const Userpage = () => {
       try {
           setLoading(true);
         const res = await axios.get( `${API}/members/summary`, {
-  withCredentials: true
+  headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  }
 });
         setSummary(res.data);
       } catch (error) {

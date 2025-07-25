@@ -62,7 +62,9 @@ const trimmedUsername = formData.username.trim();
   username: trimmedUsername,
   password: formData.password,
 },
-      { withCredentials: true }
+      { headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  } }
     );
 
     const { token, username } = response.data.data;

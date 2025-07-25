@@ -36,7 +36,9 @@ const handleSubmit = async (e) => {
         unpaidFor: 0,
       },
       {
-        withCredentials: true, 
+        headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  }, 
       }
     );
 

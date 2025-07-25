@@ -39,7 +39,9 @@ const ProfileModal = ({ open, handleClose }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(`${API}/auth/profile`, {
-          withCredentials: true,
+          headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  },
         });
         setUserName(data.username || '');
         setEmail(data.email || '');
@@ -69,7 +71,9 @@ const ProfileModal = ({ open, handleClose }) => {
       await axios.put(
         `${API}/auth/profile/update`,
         { username: userName, email },
-        { withCredentials: true }
+        { headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  } }
       );
       setUsername(userName); 
       localStorage.setItem('username', userName);

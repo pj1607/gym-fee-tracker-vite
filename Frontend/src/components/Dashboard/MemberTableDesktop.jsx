@@ -80,7 +80,9 @@ const CustomNoRowsOverlay = () => (
       setLoading(true);
       const token = localStorage.getItem("token");
       const res = await axios.get(`${API}/members/all-members`, {
-        withCredentials: true,
+       headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  }
       });
      setData(
   res.data.members.map((m) => ({
@@ -128,7 +130,9 @@ const markAsPaid = async (id) => {
     const res = await axios.put(
       `${API}/members/${id}/pay`,
       {},
-      { withCredentials: true }
+      {   headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  }},
     );
     setData((prev) =>
       prev.map((m) =>
@@ -166,7 +170,9 @@ const markAsPaid = async (id) => {
     const res = await axios.put(
       `${API}/members/${id}/undo`,
       {},
-      { withCredentials: true }
+      {  headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  }}
     );
 
     setData((prev) =>
@@ -203,7 +209,9 @@ const markAsPaid = async (id) => {
  setLoadingId(id);
     setLoadingType('delete');
     await axios.delete(`${API}/members/${id}`, {
-      withCredentials: true,
+      headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  },
     });
 
     setData((prev) => prev.filter((member) => member.id !== id)); 
@@ -227,7 +235,9 @@ const handleUpdateMember = async (updatedData) => {
     const res = await axios.put(
       `${API}/members/${updatedData.id}`,
       updatedData,
-      { withCredentials: true }
+      { headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  } }
     );
 
     setData((prev) =>
