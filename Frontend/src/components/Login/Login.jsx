@@ -41,12 +41,19 @@ const Login = () => {
     
   };
   
+
+ 
   const handleLogin = async (e) => {
   e.preventDefault();
   try {
+    const trimmedEmail = formData.email.trim();
+      const trimmedPassword = formData.password.trim();
     const response = await axios.post(
        `${API}/auth/login`,
-      formData,
+       {
+      email: trimmedEmail,
+      password: trimmedPassword,
+    },
       { withCredentials: true }
     );
     
