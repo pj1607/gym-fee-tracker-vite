@@ -23,6 +23,7 @@ import AddMemberModal from '../../Modal/AddmemberModal';
 import EditMemberModal from '../../Modal/EditMemberModal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+const API = import.meta.env.VITE_API_URL;
 
 const MemberTableMobile = () => {
   const [data, setData] = React.useState([]);
@@ -34,7 +35,7 @@ const MemberTableMobile = () => {
 
   const fetchMembers = async () => {
     try {
-      const res = await axios.get('http://localhost:4000/members/all-members', {
+      const res = await axios.get(`${API}/members/all-members`, {
         withCredentials: true,
       });
       setData(
@@ -56,7 +57,7 @@ const MemberTableMobile = () => {
   const handleMarkAsPaid = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:4000/members/${id}/pay`,
+        `${API}/${id}/pay`,
         {},
         { withCredentials: true }
       );
@@ -81,7 +82,7 @@ const MemberTableMobile = () => {
   const handleUndo = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:4000/members/${id}/undo`,
+        `${API}/members/${id}/undo`,
         {},
         { withCredentials: true }
       );
@@ -107,7 +108,7 @@ const MemberTableMobile = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/members/${id}`, {
+      await axios.delete( `${API}/members/${id}`, {
         withCredentials: true,
       });
       setData((prev) => prev.filter((m) => m._id !== id));
@@ -130,7 +131,7 @@ const MemberTableMobile = () => {
   const handleUpdateMember = async (updatedData) => {
     try {
       const res = await axios.put(
-        `http://localhost:4000/members/${updatedData.id}`,
+        `${API}/${updatedData.id}`,
         updatedData,
         { withCredentials: true }
       );

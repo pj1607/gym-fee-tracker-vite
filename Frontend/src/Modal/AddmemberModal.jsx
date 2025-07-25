@@ -12,19 +12,19 @@ import dayjs from 'dayjs';
   import axios from 'axios';
   import { toast } from 'react-toastify';
 
+const API = import.meta.env.VITE_API_URL;
+
 const AddMemberModal = ({ open, handleClose}) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const today = dayjs().format('DD-MM-YYYY');
-
-
 
 const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
     const res = await axios.post(
-      'http://localhost:4000/members/add-member', 
+      `${API}/members/add-member`, 
       {
         name: name,
         phone: phone,

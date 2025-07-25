@@ -18,7 +18,7 @@ import ForgotPasswordModal from '../../Modal/ForgotPasswordModal.jsx';
 import {toast} from 'react-toastify'
 import axios from "axios";
 import { useAuth } from '../../context/AuthContext.jsx';
-
+const API = import.meta.env.VITE_API_URL;
 
 
 // Animation
@@ -45,7 +45,7 @@ const Login = () => {
   e.preventDefault();
   try {
     const response = await axios.post(
-      'http://localhost:4000/auth/login',
+       `${API}/auth/login`,
       formData,
       { withCredentials: true }
     );

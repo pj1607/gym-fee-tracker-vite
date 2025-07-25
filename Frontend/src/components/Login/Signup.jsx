@@ -17,6 +17,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {toast} from 'react-toastify';
 import axios from "axios";
 import { useAuth } from '../../context/AuthContext.jsx';
+const API = import.meta.env.VITE_API_URL;
 
 // Animation
 const fadeIn = keyframes`
@@ -48,7 +49,7 @@ const Signup = () => {
      e.preventDefault();
 try {
     const response = await axios.post(
-      'http://localhost:4000/auth/signup',
+       `${API}/auth/signup`,
       formData,
       { withCredentials: true }
     );

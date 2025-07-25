@@ -10,6 +10,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import {toast} from 'react-toastify'
+const API = import.meta.env.VITE_API_URL;
 
 const modalStyle = {
   position: 'absolute',
@@ -38,7 +39,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
         if (!email) return toast.info('Please enter your email');
         
         setLoading(true);
-        await axios.post('http://localhost:4000/auth/send-otp', { email });
+        await axios.post( `${API}/auth/send-otp`, { email });
         toast.success('OTP sent to your email');
         setStep(2);
 
@@ -46,7 +47,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
         if (!otp) return toast.info('Please enter Otp');
 
         setLoading(true);
-        await axios.post('http://localhost:4000/auth/check-otp', { email, otp });
+        await axios.post( `${API}/auth/check-otp`, { email, otp });
          toast.success('OTP verified');
         setStep(3);
       }
@@ -64,7 +65,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
       if (!newPassword) return toast.info('Please enter a new password');
        
       setLoading(true);
-      await axios.post('http://localhost:4000/auth/reset-password', {
+      await axios.post( `${API}/auth/reset-password`, {
         email,
         newPassword,
       });

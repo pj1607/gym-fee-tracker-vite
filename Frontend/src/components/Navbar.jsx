@@ -14,6 +14,7 @@ import ProfileModal from '../Modal/ProfileModal.jsx';
 import axios from 'axios';
 import {toast} from 'react-toastify'
 import { useAuth } from '../context/AuthContext.jsx'
+const API = import.meta.env.VITE_API_URL;
 
 const Navbar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -26,7 +27,7 @@ const [openProfileModal, setOpenProfileModal] = useState(false);
 
 const handleLogout = async () => {
   try {
-    await axios.post('http://localhost:4000/auth/logout', {}, {
+    await axios.post( `${API}/auth/logout`, {}, {
       withCredentials: true,
     });
 

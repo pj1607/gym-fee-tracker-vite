@@ -15,6 +15,7 @@ import axios from 'axios';
 import ForgotPasswordModal from './ForgotPasswordModal.jsx';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext.jsx';
+const API = import.meta.env.VITE_API_URL;
 
 const ProfileModal = ({ open, handleClose }) => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const ProfileModal = ({ open, handleClose }) => {
     if (open) {
       const fetchProfile = async () => {
         try {
-          const { data } = await axios.get('http://localhost:4000/auth/profile', {
+          const { data } = await axios.get( `${API}/auth/profile`, {
             withCredentials: true,
           });
           setUserName(data.username || '');
@@ -58,7 +59,7 @@ const ProfileModal = ({ open, handleClose }) => {
   const handleSave = async () => {
     try {
       await axios.put(
-        'http://localhost:4000/auth/profile/update',
+        `${API}/auth/profile/update`,
         { username: userName, email },
         { withCredentials: true }
       );

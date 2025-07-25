@@ -23,6 +23,9 @@ import axios from 'axios';
 import {toast} from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
+const API = import.meta.env.VITE_API_URL;
+
+
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -54,7 +57,7 @@ const handleCloseEditModal = () => {
 
  const fetchMembers = async () => {
     try {
-      const res = await axios.get('http://localhost:4000/members/all-members', {
+      const res = await axios.get(`${API}/members/all-members`, {
         withCredentials: true,
       });
      setData(
@@ -91,7 +94,7 @@ React.useEffect(() => {
 const markAsPaid = async (id) => {
   try {
     const res = await axios.put(
-      `http://localhost:4000/members/${id}/pay`,
+      `${API}/members/${id}/pay`,
       {},
       { withCredentials: true }
     );
@@ -119,7 +122,7 @@ const markAsPaid = async (id) => {
   const handleUndoMarkAsPaid = async (id) => {
   try {
     const res = await axios.put(
-      `http://localhost:4000/members/${id}/undo`,
+      `${API}/members/${id}/undo`,
       {},
       { withCredentials: true }
     );
@@ -147,7 +150,7 @@ const markAsPaid = async (id) => {
 
  const handleDeleteMember = async (id) => {
   try {
-    await axios.delete(`http://localhost:4000/members/${id}`, {
+    await axios.delete(`${API}/members/${id}`, {
       withCredentials: true,
     });
 
@@ -162,7 +165,7 @@ const markAsPaid = async (id) => {
 const handleUpdateMember = async (updatedData) => {
   try {
     const res = await axios.put(
-      `http://localhost:4000/members/${updatedData.id}`,
+      `${API}/members/${updatedData.id}`,
       updatedData,
       { withCredentials: true }
     );

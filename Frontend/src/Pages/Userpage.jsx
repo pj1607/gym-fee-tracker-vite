@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+const API = import.meta.env.VITE_API_URL;
 
 
 const Userpage = () => {
@@ -19,7 +20,7 @@ const Userpage = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/members/summary');
+        const res = await axios.get( `${API}/members/summary`);
         setSummary(res.data);
       } catch (error) {
         console.error('Failed to fetch summary:', error);
