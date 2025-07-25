@@ -4,11 +4,13 @@ import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 
-
-// REGISTER
+//register
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+
+    const username = req.body.username?.trim();
+    const email = req.body.email?.trim();
+    const password = req.body.password;
 
     if (!username || !email || !password) {
       return res.status(400).json({
@@ -25,7 +27,7 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    if (typeof username !== 'string' || username.trim().length < 4) {
+    if (username.length < 4) {
       return res.status(400).json({
         error: 'Username must be at least 4 characters long.',
         success: 'no'
@@ -60,7 +62,6 @@ export const registerUser = async (req, res) => {
       expiresIn: '2d'
     });
 
-
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -87,18 +88,18 @@ export const registerUser = async (req, res) => {
     });
   }
 };
-
-
-// LOGIN 
+//LOGIN
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = req.body.email?.trim();
+    const password = req.body.password;
+
     if (!email || !password) {
-  return res.status(400).json({
-    error: 'Please fill in all the required details.',
-    success: 'no'
-  });
-}
+      return res.status(400).json({
+        error: 'Please fill in all the required details.',
+        success: 'no'
+      });
+    }
 
     const user = await User.findOne({ email });
 
@@ -108,6 +109,7 @@ export const loginUser = async (req, res) => {
         success: 'no'
       });
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -123,12 +125,12 @@ export const loginUser = async (req, res) => {
       { expiresIn: '2d' }
     );
 
-  res.cookie('token', token, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-  maxAge: 7 * 24 * 60 * 60 * 1000 
-});
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
 
     res.status(200).json({
       message: 'Login successful',
@@ -138,7 +140,6 @@ sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
         username: user.username,
         email: user.email,
         token
-        
       }
     });
 
@@ -150,6 +151,7 @@ sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     });
   }
 };
+
 //SEND-OTP
 
 export const sendOtp = async (req, res) => {
