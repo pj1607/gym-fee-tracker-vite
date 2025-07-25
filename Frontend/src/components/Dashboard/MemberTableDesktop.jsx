@@ -57,6 +57,7 @@ const handleCloseEditModal = () => {
 
  const fetchMembers = async () => {
     try {
+      const token = localStorage.getItem("token");
       const res = await axios.get(`${API}/members/all-members`, {
         withCredentials: true,
       });
@@ -67,9 +68,14 @@ const handleCloseEditModal = () => {
     lastPaidDate:  dayjs(m.lastPaidDate).format('DD MMMM YYYY')
   }))
 );
-    } catch (err) {
-      console.error('Failed to fetch members', err);
-        toast.error('Failed to fetch members');
+toast.info(res.data.message);
+    } catch (error) {
+      const errormessage =
+            error.response?.data?.error ||
+            error.response?.data?.message ||
+            'Failed to get members';
+      
+          toast.error(errormessage);
     }
   };
 
@@ -111,9 +117,13 @@ const markAsPaid = async (id) => {
       )
     );
 
-  } catch (err) {
-    console.error('Failed to update payment status', err);
-    toast.error("Failed to update payment status");
+  } catch (error) {
+   const errormessage =
+         error.response?.data?.error ||
+         error.response?.data?.message ||
+         'Failed to update payment status';
+   
+       toast.error(errormessage);
     
   }
 };
@@ -141,9 +151,13 @@ const markAsPaid = async (id) => {
           : m
       )
     );
-  } catch (err) {
-    console.error('Undo failed:', err);
-    toast.error("Failed to Undo member");
+  } catch (error) {
+   const errormessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      'Failed to Undo member';
+
+    toast.error(errormessage);
   }
 };
 
@@ -156,9 +170,13 @@ const markAsPaid = async (id) => {
 
     setData((prev) => prev.filter((member) => member.id !== id)); 
   } 
-  catch (err) {
-    console.error('Delete failed:', err);
-    toast.error("Failed to delete member");
+  catch (error) {
+   const errormessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      'Failed to delete member';
+
+    toast.error(errormessage);
   }
 };
 

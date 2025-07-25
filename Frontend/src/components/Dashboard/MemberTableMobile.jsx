@@ -44,10 +44,16 @@ const MemberTableMobile = () => {
           id: m._id,
         }))
       );
-    } catch (err) {
-      console.error('Failed to fetch members', err);
-      toast.error('Failed to fetch members');
-    }
+      toast.info(res.data.message);
+    } catch (error) {
+    const errormessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      'Failed to get members';
+
+    toast.error(errormessage);
+  }
+
   };
 
   React.useEffect(() => {
@@ -73,10 +79,15 @@ const MemberTableMobile = () => {
             : m
         )
       );
-    } catch (err) {
-      console.error('Failed to mark as paid', err);
-      toast.error('Failed to update payment status');
-    }
+    } catch (error) {
+    const errormessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      'Failed to mark member';
+
+    toast.error(errormessage);
+  }
+
   };
 
   const handleUndo = async (id) => {
@@ -100,10 +111,15 @@ const MemberTableMobile = () => {
             : m
         )
       );
-    } catch (err) {
-      console.error('Failed to undo', err);
-      toast.error('Failed to undo payment');
-    }
+    } catch (error) {
+    const errormessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      'Failed to undo member';
+
+    toast.error(errormessage);
+  }
+
   };
 
   const handleDelete = async (id) => {
@@ -112,10 +128,15 @@ const MemberTableMobile = () => {
         withCredentials: true,
       });
       setData((prev) => prev.filter((m) => m._id !== id));
-    } catch (err) {
-      console.error('Failed to delete', err);
-      toast.error('Failed to delete member');
-    }
+    }catch (error) {
+    const errormessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      'Failed to delete member';
+
+    toast.error(errormessage);
+  }
+
   };
 
   const handleEditMember = (member) => {
