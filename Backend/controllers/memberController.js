@@ -170,10 +170,8 @@ export const deleteMember = async (req, res) => {
 //getMemberSummary 
 export const getMemberSummary = async (req, res) => {
   try {
-    const totalMembers = await Member.countDocuments({_id: req.params.id,
-      createdBy: req.user._id,} );
-    const unpaidMembers = await Member.countDocuments({    _id: req.params.id,
-      createdBy: req.user._id, status: 'Unpaid' });
+    const totalMembers = await Member.countDocuments({createdBy: req.user._id,} );
+    const unpaidMembers = await Member.countDocuments({createdBy: req.user._id, status: 'Unpaid' });
 
     const paidMembers = totalMembers - unpaidMembers;
 
