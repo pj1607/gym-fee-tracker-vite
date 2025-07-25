@@ -33,26 +33,27 @@ const ProfileModal = ({ open, handleClose }) => {
   const usernameRef = useRef(null);
   const emailRef = useRef(null);
 
-  useEffect(() => {
-    if (open) {
-      const fetchProfile = async () => {
-        try {
-          setLoading(true);
-          const { data } = await axios.get( `${API}/auth/profile`, {
-            withCredentials: true,
-          });
-          setUserName(data.username || '');
-          setEmail(data.email || '');
-        } catch (err) {
-          console.error('Failed to fetch profile', err);
-        }
-      };
-      fetchProfile();
-      setLoading(false); 
-  
-    }
-    
-  }, [open]);
+ useEffect(() => {
+  if (open) {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(`${API}/auth/profile`, {
+          withCredentials: true,
+        });
+        setUserName(data.username || '');
+        setEmail(data.email || '');
+      } catch (err) {
+        console.error('Failed to fetch profile', err);
+      } finally {
+        setLoading(false);  
+      }
+    };
+
+    fetchProfile();
+  }
+}, [open]);
+
 
   useEffect(() => {
     if (isNameEditable && usernameRef.current) usernameRef.current.focus();
