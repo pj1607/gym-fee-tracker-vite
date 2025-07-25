@@ -62,6 +62,8 @@ const Login = () => {
       error.response?.data?.error ||
       error.response?.data?.message ||
       'Something went wrong';
+      console.log("API URL:", import.meta.env.VITE_API_URL);
+
 
     toast.error(errormessage);
   }
