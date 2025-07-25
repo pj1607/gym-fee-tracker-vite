@@ -104,7 +104,7 @@ const Userpage = () => {
             <Typography variant="h6" mb={2}>
               Payment Status Distribution
             </Typography>
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
                   data={pieData}
@@ -115,7 +115,7 @@ const Userpage = () => {
                   paddingAngle={5}
                   dataKey="value"
                   label={({ name, percent }) =>
-                    `${name}: ${(percent * 100).toFixed(0)}%`
+                    ` ${(percent * 100).toFixed(0)}%`
                   }
                 >
                   {pieData.map((entry, index) => (
