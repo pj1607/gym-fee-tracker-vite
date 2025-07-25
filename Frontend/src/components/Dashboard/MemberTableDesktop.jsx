@@ -341,9 +341,9 @@ const handleUpdateMember = async (updatedData) => {
       color: 'white',
       textTransform: 'none',
       fontWeight: 'bold',
-      '&:hover': {
-        backgroundColor: '#8B0000',
-      },
+      // '&:hover': {
+      //   backgroundColor: '#8B0000',
+      // },
     }}
   >
     {loadingId === row.id && loadingType === 'undo' ? 'Reverting' : 'Undo'}
@@ -361,20 +361,20 @@ const handleUpdateMember = async (updatedData) => {
       flex: 1,
       sortable: false,
       renderCell: ({ row }) => (
-       <Button
+       
+           <Button
+  size="small"
   onClick={() => handleDeleteMember(row.id)}
-  sx={{
-    '&:hover': {
-      backgroundColor: '#8B0000',
-      color: 'white',
-    },
-  }}
+  startIcon={
+    loadingId === row._id && loadingType === 'delete' ? (
+      <CircularProgress size={20} sx={{ color: 'white' }} />
+    ) : (
+      <DeleteForeverIcon />
+    )
+  }
+  sx={{ color: 'white' }}
 >
-  {loadingId === row.id && loadingType === 'delete' ? (
-    <CircularProgress size={18} sx={{ color: 'white' }} />
-  ) : (
-    <DeleteForeverIcon />
-  )}
+  {loadingId === row._id && loadingType === 'delete' ? 'Deleting' : ''}
 </Button>
 
       ),
@@ -391,9 +391,9 @@ const handleUpdateMember = async (updatedData) => {
         color: '#2196f3',
         fontWeight: 'bold',
         textTransform: 'none',
-        '&:hover': {
-          backgroundColor: '#8B0000',
-        },
+        // '&:hover': {
+        //   backgroundColor: '#8B0000',
+        // },
       }}
     >
       <EditIcon/>

@@ -179,7 +179,7 @@ const [loadingType, setLoadingType] = React.useState('');
     try {
        setLoading(true)
       const res = await axios.put(
-        `${API}/${updatedData.id}`,
+         `${API}/members/${updatedData.id}`,
         updatedData,
         { withCredentials: true }
       );
