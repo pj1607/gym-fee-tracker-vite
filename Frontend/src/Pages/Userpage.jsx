@@ -20,7 +20,9 @@ const Userpage = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await axios.get( `${API}/members/summary`);
+        const res = await axios.get( `${API}/members/summary`, {
+  withCredentials: true
+});
         setSummary(res.data);
       } catch (error) {
         console.error('Failed to fetch summary:', error);
