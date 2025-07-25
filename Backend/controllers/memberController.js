@@ -1,4 +1,6 @@
 import Member from '../models/memberModel.js';
+import mongoose from 'mongoose';
+
 
 // ALL-MEMBERS
 export const allMembers = async (req, res) => {
@@ -87,18 +89,18 @@ export const addMember = async (req, res) => {
 
 //UPDATE-PAYMENT-STATUS
 export const updatePaymentStatus = async (req, res) => {
-  const { id } = req.params;
+  const objectId = new mongoose.Types.ObjectId(req.params.id);
 
   try {
   
-    const member = await Member.findOne({ _id: id, createdBy: req.user._id });
+    const member = await Member.findOne({ _id: objectId, createdBy: req.user._id });
 
     if (!member) {
       return res.status(404).json({ message: "Member not found" });
     }
 
     const updatedMember = await Member.findOneAndUpdate(
-      { _id: id, createdBy: req.user._id },
+      { _id: objectId, createdBy: req.user._id },
       {
         previousUnpaidMonths: member.unpaidFor,
         previousLastPaidDate: member.lastPaidDate,
@@ -119,17 +121,18 @@ export const updatePaymentStatus = async (req, res) => {
 
 //UNDO-PAYMENT-STATUS
 export const undoPaymentStatus = async (req, res) => {
-  const { id } = req.params;
+  const objectId = new mongoose.Types.ObjectId(req.params.id);
+
 
   try {
-    const member = await Member.findOne({ _id: id, createdBy: req.user._id });
+    const member = await Member.findOne({ _id: objectId, createdBy: req.user._id });
 
     if (!member) {
       return res.status(404).json({ message: "Member not found" });
     }
 
     const updatedMember = await Member.findOneAndUpdate(
-      { _id: id, createdBy: req.user._id },
+      { _id: objectId, createdBy: req.user._id },
       {
         status: "Unpaid",
         unpaidMonths: member.previousUnpaidMonths ?? 1,
@@ -148,10 +151,12 @@ export const undoPaymentStatus = async (req, res) => {
 
 //DELETE-MEMBER
 export const deleteMember = async (req, res) => {
+  const objectId = new mongoose.Types.ObjectId(req.params.id);
+
   try {
     const deleted = await Member.findOneAndDelete({
-      _id: req.params.id,
-      createdBy: req.user._id, 
+      _id: objectId,
+      createdBy: req.user._id,
     });
 
     if (!deleted) {
@@ -163,6 +168,7 @@ export const deleteMember = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 //getMemberSummary 
 export const getMemberSummary = async (req, res) => {
@@ -213,7 +219,7 @@ export const updateMember = async (req, res) => {
     const existingMember = await Member.findOne({
       phone,
       createdBy: req.user._id,
-      _id: { $ne: id },
+      _id: { $ne: new mongoose.Types.ObjectId(id) }
     });
 
     if (existingMember) {
