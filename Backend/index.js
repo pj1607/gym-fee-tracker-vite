@@ -14,10 +14,16 @@ app.use(cookieParser());
 
 connectDB();
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://gym-fee-tracker.vercel.app'
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: allowedOrigins,
   credentials: true
 }));
+
 
 // Routes
 app.use('/members', memberRoutes);
