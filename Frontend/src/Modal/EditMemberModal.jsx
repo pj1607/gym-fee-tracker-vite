@@ -9,10 +9,9 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const EditMemberModal = ({ open, handleClose, member, onUpdate }) => {
+const EditMemberModal = ({ open, handleClose, member, onUpdate,loading }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-    const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (member) {
@@ -93,6 +92,7 @@ const EditMemberModal = ({ open, handleClose, member, onUpdate }) => {
           <Button
             type="submit"
             fullWidth
+              disabled={loading}
             sx={{
               background: 'linear-gradient(45deg, #d32f2f, #b71c1c)',
               color: '#fff',
