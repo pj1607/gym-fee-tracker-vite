@@ -77,7 +77,16 @@ const Userpage = () => {
             }}
           >
             <Typography variant="h6">Total Members</Typography>
-            <Typography variant="h3" sx={{ color: '#B2ACAC' }}>  {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : totalUsers}</Typography>
+            <Box display="flex" justifyContent="center" alignItems="center" height={40}>
+  {loading ? (
+    <CircularProgress size={26} sx={{ color: 'white' }} />
+  ) : (
+    <Typography variant="h3" sx={{ color: '#B2ACAC' }}>
+      {totalUsers}
+    </Typography>
+  )}
+</Box>
+
           </Paper>
         </Grid>
 
