@@ -13,6 +13,11 @@ import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PublicRoute from './components/PublicRoute.jsx';
 
+import axios from 'axios';
+
+axios.defaults.withCredentials = true; 
+
+
 import './style.css';
 
 export const App = () => {
