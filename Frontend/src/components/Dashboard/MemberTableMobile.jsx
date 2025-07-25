@@ -71,10 +71,10 @@ const [loadingType, setLoadingType] = React.useState('');
 
   const handleMarkAsPaid = async (id) => {
     try {
-        setLoadingId(id);
+    setLoadingId(id);
     setLoadingType('pay');
       const res = await axios.put(
-        `${API}/${id}/pay`,
+        `${API}/members/${id}/pay`,
         {},
         { withCredentials: true }
       );
