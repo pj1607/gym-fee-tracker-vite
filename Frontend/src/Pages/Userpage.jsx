@@ -110,8 +110,8 @@ const Userpage = () => {
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
+                  innerRadius={40}
+                  outerRadius={70}
                   paddingAngle={5}
                   dataKey="value"
                   label={({ name, percent }) =>
