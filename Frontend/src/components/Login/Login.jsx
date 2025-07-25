@@ -42,6 +42,7 @@ const Login = () => {
   };
   
   const handleLogin = async (e) => {
+       console.log("API URL:", import.meta.env.VITE_API_URL);
   e.preventDefault();
   try {
     const response = await axios.post(
@@ -62,7 +63,6 @@ const Login = () => {
       error.response?.data?.error ||
       error.response?.data?.message ||
       'Something went wrong';
-      console.log("API URL:", import.meta.env.VITE_API_URL);
 
 
     toast.error(errormessage);
