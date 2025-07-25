@@ -5,7 +5,7 @@ import {
   Typography,
   TextField,
   Button,
-  IconButton,CircularProgress,LinearProgress 
+  IconButton,CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
@@ -140,7 +140,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
             }}
             />
             <Button onClick={handleNext} fullWidth variant="contained"  disabled={loading} sx={buttonStyle}>
-              {loading ? <CircularProgress size={24} color="white" /> : 'Send OTP'}
+              {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Send OTP'}
             </Button>
           </>
         )}
@@ -157,7 +157,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
               InputLabelProps={{ style: { color: '#aaa' } }}
             />
            <Button onClick={handleNext} fullWidth variant="contained"  disabled={loading} sx={buttonStyle}>
-              {loading ? <CircularProgress size={24} color="white" /> : 'Submit OTP'}
+              {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/>: 'Submit OTP'}
             </Button>
           </>
         )}
@@ -180,7 +180,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
       },  },}}
             />
            <Button onClick={handleSubmit} fullWidth variant="contained"  disabled={loading} sx={buttonStyle}>
-              {loading ? <CircularProgress size={24} color="white" /> : 'Reset Password'}
+              {loading ? <CircularProgress size={26}sx={{color: 'white', }}/> : 'Reset Password'}
             </Button>
           </>
         )}

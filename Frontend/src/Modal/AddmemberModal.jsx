@@ -5,7 +5,7 @@ import {
   Typography,
   TextField,
   Button,
-  IconButton,
+  IconButton,CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
@@ -18,11 +18,14 @@ const AddMemberModal = ({ open, handleClose}) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const today = dayjs().format('DD-MM-YYYY');
+  const [loading, setLoading] = useState(false);
 
 const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
+    setLoading(true);
+
     const res = await axios.post(
       `${API}/members/add-member`, 
       {
@@ -52,6 +55,9 @@ const handleSubmit = async (e) => {
           'Something went wrong';
 
         toast.error(errormessage);
+  }
+  finally {
+    setLoading(false); 
   }
 };
 
@@ -149,6 +155,7 @@ const handleSubmit = async (e) => {
           <Button
             type="submit"
             fullWidth
+             disabled={loading}
             sx={{
               background: 'linear-gradient(45deg, #d32f2f, #b71c1c)',
               color: '#fff',
@@ -160,7 +167,7 @@ const handleSubmit = async (e) => {
               },
             }}
           >
-            Add Member
+               {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Add Member'}
           </Button>
         </form>
       </Box>

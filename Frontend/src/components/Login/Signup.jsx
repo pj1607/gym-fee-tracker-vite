@@ -10,7 +10,7 @@ import {
   IconButton,
   Box,
    keyframes,
-  useTheme,
+  useTheme,CircularProgress
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -33,6 +33,8 @@ const Signup = () => {
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+   const [loading, setLoading] = useState(false);
+  
 
   const theme = useTheme();
     const navigate = useNavigate();
@@ -52,19 +54,20 @@ try {
   const trimmedEmail = formData.email.trim();
 const trimmedUsername = formData.username.trim();
 
+ setLoading(true);
     const response = await axios.post(
        `${API}/auth/signup`,
        {
   email: trimmedEmail,
   username: trimmedUsername,
-  password,
+  password: formData.password,
 },
       { withCredentials: true }
     );
 
     const { token, username } = response.data.data;
       login(token, username);
-      toast.success(`Welcome back, ${username}!`);
+      toast.success(`Welcome, ${username}!`);
       navigate('/user', { replace: true });
 
   } catch (error) {
@@ -75,6 +78,9 @@ const trimmedUsername = formData.username.trim();
       'Something went wrong';
 
     toast.error(errormessage);
+  }
+  finally {
+    setLoading(false); 
   }
   };
 
@@ -180,6 +186,7 @@ const trimmedUsername = formData.username.trim();
 
        <Button                 type="submit"
                                   variant="contained"
+                                  disabled={loading}
                                   fullWidth
                                   sx={{
                                     background: 'linear-gradient(45deg, #d32f2f, #b71c1c)',
@@ -192,7 +199,7 @@ const trimmedUsername = formData.username.trim();
                                     },
                                   }}
                                 >
-                                  Register
+                                   {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'REGISTER'}
                                 </Button>
       </form>
     </Paper>

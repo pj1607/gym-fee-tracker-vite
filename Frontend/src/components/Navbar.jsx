@@ -6,7 +6,7 @@ import {
   Stack,
   Button,
   Drawer,
-  IconButton,
+  IconButton,CircularProgress
 } from '@mui/material';
 import Logo from '../assets/images/logo.png';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -18,6 +18,8 @@ const API = import.meta.env.VITE_API_URL;
 
 const Navbar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const isMobile = useMediaQuery('(max-width:900px)');
   const navigate = useNavigate();
   const { logout,isLoggedIn } = useAuth(); 
@@ -27,6 +29,7 @@ const [openProfileModal, setOpenProfileModal] = useState(false);
 
 const handleLogout = async () => {
   try {
+     setLoading(true); 
     await axios.post( `${API}/auth/logout`, {}, {
       withCredentials: true,
     });
@@ -37,6 +40,9 @@ const handleLogout = async () => {
 
   } catch (error) {
     console.error('Logout failed:', error);
+  }
+  finally {
+    setLoading(false); // stop loading
   }
 };
 const handleLogoClick = () => {
@@ -61,46 +67,60 @@ const handleLogoClick = () => {
     
   ];
 
-  const renderNavButtons = (mobile = false) => {
-    const items = isLoggedIn ? loggedInNavItems : guestNavItems;
+const renderNavButtons = (mobile = false) => {
+  const items = isLoggedIn ? loggedInNavItems : guestNavItems;
 
-    return items.map((item) =>
-      item.link ? (
-        <Button
-          key={item.text}
-          component={Link}
-          to={item.link}
-          onClick={() => mobile && setOpenDrawer(false)}
-          variant="text"
-          sx={{
-            color: '#aaa',
-            fontSize: '15px',
-            justifyContent: mobile ? 'flex-start' : 'center',
-            '&:hover': { color: '#d32f2f' },
-          }}
-        >
-          {item.text}
-        </Button>
-      ) : (
-        <Button
-          key={item.text}
-          onClick={() => {
-            item.action();
-            if (mobile) setOpenDrawer(false);
-          }}
-          variant="text"
-          sx={{
-            color: '#aaa',
-            fontSize: '15px',
-            justifyContent: mobile ? 'flex-start' : 'center',
-            '&:hover': { color: '#d32f2f' },
-          }}
-        >
-          {item.text}
-        </Button>
-      )
-    );
-  };
+  return items.map((item) =>
+    item.link ? (
+      <Button
+        key={item.text}
+        component={Link}
+        to={item.link}
+        onClick={() => mobile && setOpenDrawer(false)}
+        variant="text"
+        sx={{
+          color: '#aaa',
+          fontSize: '15px',
+          justifyContent: mobile ? 'flex-start' : 'center',
+          '&:hover': { color: '#d32f2f' },
+        }}
+      >
+        {item.text}
+      </Button>
+    ) : item.text === 'Logout' && loading ? ( 
+      <Button
+        key={item.text}
+        disabled
+        variant="text"
+        sx={{
+          color: '#aaa',
+          fontSize: '15px',
+          justifyContent: mobile ? 'flex-start' : 'center',
+        }}
+      >
+        <CircularProgress size={20} sx={{ color: '#fff' }} />
+      </Button>
+    ) : (
+      <Button
+        key={item.text}
+        onClick={() => {
+          item.action();
+          if (mobile) setOpenDrawer(false);
+        }}
+        variant="text"
+        sx={{
+          color: '#aaa',
+          fontSize: '15px',
+          justifyContent: mobile ? 'flex-start' : 'center',
+          '&:hover': { color: '#d32f2f' },
+        }}
+      >
+        {item.text}
+      </Button>
+    )
+  );
+};
+
 
   return (
     <Box

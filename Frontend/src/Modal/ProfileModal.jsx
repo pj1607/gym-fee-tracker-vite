@@ -7,6 +7,7 @@ import {
   Button,
   IconButton,
   InputAdornment,
+  CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
@@ -21,6 +22,7 @@ const ProfileModal = ({ open, handleClose }) => {
   const navigate = useNavigate();
   const { username, setUsername } = useAuth(); 
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
@@ -35,6 +37,7 @@ const ProfileModal = ({ open, handleClose }) => {
     if (open) {
       const fetchProfile = async () => {
         try {
+          setLoading(true);
           const { data } = await axios.get( `${API}/auth/profile`, {
             withCredentials: true,
           });
@@ -45,7 +48,10 @@ const ProfileModal = ({ open, handleClose }) => {
         }
       };
       fetchProfile();
+      setLoading(false); 
+  
     }
+    
   }, [open]);
 
   useEffect(() => {
@@ -58,6 +64,7 @@ const ProfileModal = ({ open, handleClose }) => {
 
   const handleSave = async () => {
     try {
+        setLoading(true);
       await axios.put(
         `${API}/auth/profile/update`,
         { username: userName, email },
@@ -78,6 +85,9 @@ const ProfileModal = ({ open, handleClose }) => {
             
           toast.error(errormessage);
     }
+    finally {
+    setLoading(false); 
+  }
   };
 
   return (
@@ -165,6 +175,7 @@ const ProfileModal = ({ open, handleClose }) => {
         <Button
           fullWidth
           onClick={handleSave}
+          disabled={loading}
           variant="contained"
           size="large"
           sx={{
@@ -179,7 +190,8 @@ const ProfileModal = ({ open, handleClose }) => {
             mb: 1,
           }}
         >
-          Save Changes
+            {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Save Changes'}
+          
         </Button>
 
         <Button

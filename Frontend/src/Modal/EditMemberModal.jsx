@@ -5,13 +5,14 @@ import {
   Typography,
   TextField,
   Button,
-  IconButton,
+  IconButton,CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 const EditMemberModal = ({ open, handleClose, member, onUpdate }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+    const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (member) {
@@ -103,7 +104,8 @@ const EditMemberModal = ({ open, handleClose, member, onUpdate }) => {
               },
             }}
           >
-            Update Member
+              {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Update Member'}
+                                         
           </Button>
         </form>
       </Box>

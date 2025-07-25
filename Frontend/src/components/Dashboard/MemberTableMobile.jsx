@@ -9,7 +9,7 @@ import {
   InputBase,
   Card,
   CardContent,
-  Divider,
+  Divider,CircularProgress
 } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -33,8 +33,11 @@ const MemberTableMobile = () => {
   const [editModalOpen, setEditModalOpen] = React.useState(false);
   const [selectedMember, setSelectedMember] = React.useState(null);
 
+  const [loading, setLoading] = React.useState(false);
+
   const fetchMembers = async () => {
     try {
+       setLoading(true);
       const res = await axios.get(`${API}/members/all-members`, {
         withCredentials: true,
       });
@@ -52,6 +55,9 @@ const MemberTableMobile = () => {
       'Failed to get members';
 
     toast.error(errormessage);
+  }
+   finally {
+    setLoading(false);
   }
 
   };
@@ -245,74 +251,100 @@ const MemberTableMobile = () => {
         </Button>
       </Box>
 
-      <Box display="flex" flexDirection="column" gap={2}>
-        {filteredRows.map((row) => (
-          <Card key={row._id} sx={{ backgroundColor: '#1e1e1e', color: 'white' }}>
-            <CardContent>
-              <Typography fontWeight="bold">{row.name}</Typography>
-              <Typography variant="body2">📞 {row.phone}</Typography>
-              <Typography variant="body2">
-                💰 Status:{' '}
-                {row.status === 'Paid' ? (
-                  <DoneIcon fontSize="small" sx={{ color: 'green' }} />
-                ) : (
-                  <ClearIcon fontSize="small" sx={{ color: 'red' }} />
-                )}{' '}
-                {row.status}
-              </Typography>
-              <Typography variant="body2">
-                📅 Last Paid: {row.lastPaidDate || 'N/A'}
-              </Typography>
-              <Typography variant="body2">
-                ❌ Unpaid For: {row.unpaidFor} month(s)
-              </Typography>
+        {loading ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="400px"
+        >
+          <CircularProgress sx={{ color: 'white' }} size={40} />
+        </Box>
+      ) :(<Box display="flex" flexDirection="column" gap={2}>
+  {filteredRows.length === 0 ? (
+    <Box
+      textAlign="center"
+      py={6}
+      color="#ccc"
+    >
+      <Typography variant="h6" fontWeight="bold" gutterBottom>
+        No Members Found
+      </Typography>
+      <Typography variant="body2">
+        Try adding a member or adjust your filters.
+      </Typography>
+    </Box>
+  ) : (
+    filteredRows.map((row) => (
+      <Card key={row._id} sx={{ backgroundColor: '#1e1e1e', color: 'white' }}>
+        <CardContent>
+          <Typography fontWeight="bold">{row.name}</Typography>
+          <Typography variant="body2">📞 {row.phone}</Typography>
+          <Typography variant="body2">
+            💰 Status:{' '}
+            {row.status === 'Paid' ? (
+              <DoneIcon fontSize="small" sx={{ color: 'green' }} />
+            ) : (
+              <ClearIcon fontSize="small" sx={{ color: 'red' }} />
+            )}{' '}
+            {row.status}
+          </Typography>
+          <Typography variant="body2">
+            📅 Last Paid: {row.lastPaidDate || 'N/A'}
+          </Typography>
+          <Typography variant="body2">
+            ❌ Unpaid For: {row.unpaidFor} month(s)
+          </Typography>
 
-              <Divider sx={{ my: 1, backgroundColor: '#555' }} />
+          <Divider sx={{ my: 1, backgroundColor: '#555' }} />
 
-              <Box display="flex" gap={1} flexWrap="wrap">
-                {row.status === 'Unpaid' ? (
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => handleMarkAsPaid(row.id)}
-                    startIcon={<CurrencyRupeeIcon />}
-                    sx={{ backgroundColor: '#4caf50', color: '#fff' }}
-                  >
-                    Mark as Paid
-                  </Button>
-                ) : (
-                  <Button
-                    size="small"
-                    onClick={() => handleUndo(row.id)}
-                    startIcon={<UndoIcon />}
-                    sx={{ color: 'white' }}
-                  >
-                    Undo
-                  </Button>
-                )}
+          <Box display="flex" gap={1} flexWrap="wrap">
+            {row.status === 'Unpaid' ? (
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => handleMarkAsPaid(row.id)}
+                startIcon={<CurrencyRupeeIcon />}
+                sx={{ backgroundColor: '#4caf50', color: '#fff' }}
+              >
+                Mark as Paid
+              </Button>
+            ) : (
+              <Button
+                size="small"
+                onClick={() => handleUndo(row.id)}
+                startIcon={<UndoIcon />}
+                sx={{ color: 'white' }}
+              >
+                Undo
+              </Button>
+            )}
 
-                <Button
-                  size="small"
-                  onClick={() => handleDelete(row.id)}
-                  startIcon={<DeleteForeverIcon />}
-                  sx={{ color: 'white' }}
-                >
-                  Delete
-                </Button>
+            <Button
+              size="small"
+              onClick={() => handleDelete(row.id)}
+              startIcon={<DeleteForeverIcon />}
+              sx={{ color: 'white' }}
+            >
+              Delete
+            </Button>
 
-                <Button
-                  size="small"
-                  onClick={() => handleEditMember(row)}
-                  startIcon={<EditIcon />}
-                  sx={{ color: '#2196f3' }}
-                >
-                  Edit
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
+            <Button
+              size="small"
+              onClick={() => handleEditMember(row)}
+              startIcon={<EditIcon />}
+              sx={{ color: '#2196f3' }}
+            >
+              Edit
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+    ))
+  )}
+</Box>
+
+      )}
 
       {/* Add Member Modal */}
       <AddMemberModal open={isModalOpen} handleClose={handleCloseModal} />

@@ -8,8 +8,9 @@ import {
   IconButton,
   keyframes,
   InputBase,
+  CircularProgress
 } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid ,GridOverlay } from '@mui/x-data-grid';
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
@@ -41,6 +42,8 @@ const MemberTableDesktop = () => {
 const [editModalOpen, setEditModalOpen] = React.useState(false);
 const [selectedMember, setSelectedMember] = React.useState(null);
 
+const [loading, setLoading] = React.useState(false);
+
 
 const handleEditMember = (member) => {
   setSelectedMember(member);
@@ -51,12 +54,27 @@ const handleCloseEditModal = () => {
   setEditModalOpen(false);
   setSelectedMember(null);
 };
-
+const CustomNoRowsOverlay = () => (
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      color: '#aaa',
+    }}
+  >
+    <Typography variant="h6" fontWeight="bold">No Members Found</Typography>
+    <Typography variant="body2">Click “+ Add Member” to get started</Typography>
+  </Box>
+);
 
 
 
  const fetchMembers = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
       const res = await axios.get(`${API}/members/all-members`, {
         withCredentials: true,
@@ -77,6 +95,9 @@ toast.info(res.data.message);
       
           toast.error(errormessage);
     }
+    finally {
+    setLoading(false);
+  }
   };
 
 React.useEffect(() => {
@@ -182,6 +203,7 @@ const markAsPaid = async (id) => {
 
 const handleUpdateMember = async (updatedData) => {
   try {
+    setLoading(true)
     const res = await axios.put(
       `${API}/members/${updatedData.id}`,
       updatedData,
@@ -202,6 +224,9 @@ const handleUpdateMember = async (updatedData) => {
          'Failed to update member';
     
         toast.error(errormessage);
+  }
+  finally {
+    setLoading(false);
   }
 };
 
@@ -419,7 +444,16 @@ const handleUpdateMember = async (updatedData) => {
         </Box>
       </Box>
 
-      <DataGrid
+      {loading ? (
+  <Box
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    height="400px"
+  >
+    <CircularProgress sx={{ color: 'white' }} size={40} />
+  </Box>
+) :(<DataGrid
         rows={filteredRows}
         columns={columns}
         pageSize={10}
@@ -428,6 +462,7 @@ const handleUpdateMember = async (updatedData) => {
         disableColumnResize
         disableSelectionOnClick
         disableColumnMenu
+        slots={{ noRowsOverlay: CustomNoRowsOverlay }}
         sx={{
           height: '500px',
           background: 'linear-gradient(to right, #000000, #1a1a1a)',
@@ -475,6 +510,7 @@ const handleUpdateMember = async (updatedData) => {
 
         }}
       />
+      )}
 
       {/* Modal */}
       <AddMemberModal
@@ -482,6 +518,7 @@ const handleUpdateMember = async (updatedData) => {
         handleClose={handleCloseModal}
       />
       <EditMemberModal
+        loading={loading}
   open={editModalOpen}
   handleClose={handleCloseEditModal}
   member={selectedMember}

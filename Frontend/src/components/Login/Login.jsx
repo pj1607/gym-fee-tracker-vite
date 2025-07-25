@@ -10,7 +10,7 @@ import {
   InputAdornment,
   IconButton,
   keyframes,
-  useTheme
+  useTheme,CircularProgress
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -35,6 +35,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -48,6 +49,8 @@ const Login = () => {
   try {
     const trimmedEmail = formData.email.trim();
       const trimmedPassword = formData.password.trim();
+
+    setLoading(true);
     const response = await axios.post(
        `${API}/auth/login`,
        {
@@ -72,6 +75,9 @@ const Login = () => {
 
 
     toast.error(errormessage);
+  }
+  finally {
+    setLoading(false); 
   }
 };
 
@@ -154,6 +160,7 @@ const Login = () => {
           />
            <Button                 type="submit"
                                   variant="contained"
+                                  disabled={loading}
                                   fullWidth
                                   sx={{
                                     background: 'linear-gradient(45deg, #d32f2f, #b71c1c)',
@@ -166,7 +173,7 @@ const Login = () => {
                                     },
                                   }}
                                 >
-                                  Sign In
+                                  {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'LOGIN'}
                                 </Button>
         </form>
 
