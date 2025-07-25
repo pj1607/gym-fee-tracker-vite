@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Grid, Paper } from '@mui/material';
+import { Box, Typography, Grid, Paper ,CircularProgress} from '@mui/material';
 import {
   PieChart,
   Pie,
   Cell,
   Tooltip,
   ResponsiveContainer,
-  Legend,CircularProgress
+  Legend,
 } from 'recharts';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -77,7 +77,7 @@ const Userpage = () => {
             }}
           >
             <Typography variant="h6">Total Members</Typography>
-            <Typography variant="h3" sx={{ color: '#B2ACAC' }}>  {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : {totalUsers}}</Typography>
+            <Typography variant="h3" sx={{ color: '#B2ACAC' }}>  {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : totalUsers}</Typography>
           </Paper>
         </Grid>
 
