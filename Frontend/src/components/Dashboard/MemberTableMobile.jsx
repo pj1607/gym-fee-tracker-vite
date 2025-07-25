@@ -34,6 +34,9 @@ const MemberTableMobile = () => {
   const [selectedMember, setSelectedMember] = React.useState(null);
 
   const [loading, setLoading] = React.useState(false);
+  const [loadingId, setLoadingId] = React.useState(null);
+const [loadingType, setLoadingType] = React.useState('');
+
 
   const fetchMembers = async () => {
     try {
@@ -68,7 +71,8 @@ const MemberTableMobile = () => {
 
   const handleMarkAsPaid = async (id) => {
     try {
-       setLoading(true)
+        setLoadingId(id);
+    setLoadingType('pay');
       const res = await axios.put(
         `${API}/${id}/pay`,
         {},
@@ -94,15 +98,17 @@ const MemberTableMobile = () => {
 
     toast.error(errormessage);
   }
-  finally {
-    setLoading(false);
+ finally {
+    setLoadingId(null);
+    setLoadingType('');
   }
 
   };
 
   const handleUndo = async (id) => {
     try {
-       setLoading(true)
+       setLoadingId(id);
+    setLoadingType('undo');
       const res = await axios.put(
         `${API}/members/${id}/undo`,
         {},
@@ -131,14 +137,15 @@ const MemberTableMobile = () => {
     toast.error(errormessage);
   }
    finally {
-    setLoading(false);
+    setLoadingId(null);
+    setLoadingType('');
   }
-
   };
 
   const handleDelete = async (id) => {
     try {
-       setLoading(true)
+    setLoadingId(id);
+    setLoadingType('delete');
       await axios.delete( `${API}/members/${id}`, {
         withCredentials: true,
       });
@@ -152,7 +159,8 @@ const MemberTableMobile = () => {
     toast.error(errormessage);
   }
    finally {
-    setLoading(false);
+    setLoadingId(null);
+    setLoadingType('');
   }
 
   };
@@ -315,36 +323,55 @@ const MemberTableMobile = () => {
           <Divider sx={{ my: 1, backgroundColor: '#555' }} />
 
           <Box display="flex" gap={1} flexWrap="wrap">
-            {row.status === 'Unpaid' ? (
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => handleMarkAsPaid(row.id)}
-                startIcon={<CurrencyRupeeIcon />}
-                sx={{ backgroundColor: '#4caf50', color: '#fff' }}
-              >
-               {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Mark as Paid'} 
-              </Button>
-            ) : (
-              <Button
-                size="small"
-                onClick={() => handleUndo(row.id)}
-                startIcon={<UndoIcon />}
-                sx={{ color: 'white' }}
-              >
-                 {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Undo'}
-                            
-              </Button>
-            )}
+         {row.status === 'Unpaid' ? (
+  <Button
+    variant="contained"
+    size="small"
+    onClick={() => handleMarkAsPaid(row._id)}
+    startIcon={
+      loadingId === row._id && loadingType === 'pay' ? (
+        <CircularProgress size={20} sx={{ color: 'white' }} />
+      ) : (
+        <CurrencyRupeeIcon />
+      )
+    }
+    sx={{ backgroundColor: '#4caf50', color: '#fff' }}
+  >
+    {loadingId === row._id && loadingType === 'pay' ? 'Processing' : 'Mark as Paid'}
+  </Button>
+) : (
+  <Button
+    size="small"
+    onClick={() => handleUndo(row._id)}
+    startIcon={
+      loadingId === row._id && loadingType === 'undo' ? (
+        <CircularProgress size={20} sx={{ color: 'white' }} />
+      ) : (
+        <UndoIcon />
+      )
+    }
+    sx={{ color: 'white' }}
+  >
+    {loadingId === row._id && loadingType === 'undo' ? 'Reverting' : 'Undo'}
+  </Button>
+)}
 
-            <Button
-              size="small"
-              onClick={() => handleDelete(row.id)}
-              startIcon={<DeleteForeverIcon />}
-              sx={{ color: 'white' }}
-            >
-                {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : <DeleteForeverIcon /> }
-            </Button>
+
+           <Button
+  size="small"
+  onClick={() => handleDelete(row._id)}
+  startIcon={
+    loadingId === row._id && loadingType === 'delete' ? (
+      <CircularProgress size={20} sx={{ color: 'white' }} />
+    ) : (
+      <DeleteForeverIcon />
+    )
+  }
+  sx={{ color: 'white' }}
+>
+  {loadingId === row._id && loadingType === 'delete' ? 'Deleting' : ''}
+</Button>
+
 
             <Button
               size="small"
