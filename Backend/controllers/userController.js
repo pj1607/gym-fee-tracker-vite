@@ -5,9 +5,9 @@ import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 
 //register
+
 export const registerUser = async (req, res) => {
   try {
-
     const username = req.body.username?.trim();
     const email = req.body.email?.trim();
     const password = req.body.password;
@@ -59,14 +59,7 @@ export const registerUser = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '2d'
-    });
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000
+      expiresIn: '2d'  // Token expires in 2 days
     });
 
     res.status(201).json({
@@ -76,7 +69,7 @@ export const registerUser = async (req, res) => {
         _id: newUser._id,
         username: newUser.username,
         email: newUser.email,
-        token
+        token  // Send the token in the response body
       }
     });
 
@@ -122,15 +115,8 @@ export const loginUser = async (req, res) => {
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: '2d' }
+      { expiresIn: '2d' }  // Token expires in 2 days
     );
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
 
     res.status(200).json({
       message: 'Login successful',
@@ -139,7 +125,7 @@ export const loginUser = async (req, res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
-        token
+        token  // Send the token in the response body
       }
     });
 
