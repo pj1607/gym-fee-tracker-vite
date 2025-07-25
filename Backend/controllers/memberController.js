@@ -33,8 +33,8 @@ export const allMembers = async (req, res) => {
       members: updatedMembers,
       totalMembers: totalMember,
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -170,8 +170,11 @@ export const deleteMember = async (req, res) => {
 //getMemberSummary 
 export const getMemberSummary = async (req, res) => {
   try {
-    const totalMembers = await Member.countDocuments();
-    const unpaidMembers = await Member.countDocuments({ status: 'Unpaid' });
+    const totalMembers = await Member.countDocuments({_id: req.params.id,
+      createdBy: req.user._id,} );
+    const unpaidMembers = await Member.countDocuments({    _id: req.params.id,
+      createdBy: req.user._id, status: 'Unpaid' });
+
     const paidMembers = totalMembers - unpaidMembers;
 
     res.status(200).json({

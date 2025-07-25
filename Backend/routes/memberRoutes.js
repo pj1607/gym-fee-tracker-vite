@@ -9,7 +9,7 @@ import { verifyToken } from '../auth/auth.js';
 
 const router = express.Router();
 
-router.get('/summary', getMemberSummary);
+router.get('/summary',verifyToken, getMemberSummary);
  
 router.get('/all-members', verifyToken,allMembers);               
 router.post('/add-member',verifyToken, addMember);           
