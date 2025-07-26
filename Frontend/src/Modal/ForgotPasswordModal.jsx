@@ -224,6 +224,10 @@ const ForgotPasswordModal = ({ open, onClose }) => {
     '&:hover': {
       color: '#f44336',
     },
+    '&.Mui-disabled': {
+      color: 'white', 
+      opacity: 0.5,   
+    },
   }}
 >
   {timer > 0 ? `Resend OTP (${timer}s)` : 'Resend OTP'}
