@@ -37,7 +37,7 @@ const handleSubmit = async (e) => {
       },
       {
         headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
   }, 
       }
     );

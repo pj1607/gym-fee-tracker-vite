@@ -13,6 +13,9 @@ import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PublicRoute from './components/PublicRoute.jsx';
 
+import OAuthSuccess from './Pages/OAuthSuccess.jsx';
+
+
 import axios from 'axios';
 
 axios.defaults.withCredentials = true; 
@@ -49,6 +52,7 @@ export const App = () => {
           }}
         >
          <Routes>
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
   {/* Public pages */}
   <Route
     path="/"

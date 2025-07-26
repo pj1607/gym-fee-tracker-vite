@@ -192,6 +192,20 @@ const Login = () => {
         >
           Forgot Password?
         </Button>
+   <a href={`${API}/auth/google`} style={{ textDecoration: 'none' }}>
+  <div style={{
+    backgroundColor: '#4285F4',
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '4px',
+    display: 'inline-block',
+    cursor: 'pointer'
+  }}>
+    Login with Google
+  </div>
+</a>
+
+
 
         <ForgotPasswordModal open={modalOpen} onClose={() => setModalOpen(false)} />
       </Paper></Box>

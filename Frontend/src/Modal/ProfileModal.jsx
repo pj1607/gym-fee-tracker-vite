@@ -40,7 +40,7 @@ const ProfileModal = ({ open, handleClose }) => {
         setLoading(true);
         const { data } = await axios.get(`${API}/auth/profile`, {
           headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`, 
   },
         });
         setUserName(data.username || '');
