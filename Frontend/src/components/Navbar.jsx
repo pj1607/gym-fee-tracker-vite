@@ -188,7 +188,7 @@ const renderNavButtons = (mobile = false) => {
 
           {/* Drawer for mobile */}
           <Drawer
-            anchor="left"
+            anchor="right"
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
           >
