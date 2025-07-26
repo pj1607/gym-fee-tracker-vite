@@ -203,7 +203,7 @@ const trimmedUsername = formData.username.trim();
                                 >
                                    {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'REGISTER'}
                                 </Button>
-                                <Box
+                                {/* <Box
   mt={2}
   display="flex"
   alignItems="center"
@@ -226,7 +226,7 @@ const trimmedUsername = formData.username.trim();
       mx: 2,
     }}
   />
-</Box>
+</Box> */}
 
 {/* Google Sign In Button */}
 {/* <a href={`${API}/auth/google`} style={{ textDecoration: 'none' }}>
