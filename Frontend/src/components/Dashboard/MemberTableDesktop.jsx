@@ -8,10 +8,11 @@ import {
   IconButton,
   keyframes,
   InputBase,
-  CircularProgress
+  CircularProgress,Tooltip as MuiTooltip,
 } from '@mui/material';
 import { DataGrid ,GridOverlay } from '@mui/x-data-grid';
 import DoneIcon from '@mui/icons-material/Done';
+import HomeFilledIcon from '@mui/icons-material/HomeFilled';
 import ClearIcon from '@mui/icons-material/Clear';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -22,7 +23,7 @@ import AddMemberModal from '../../Modal/AddmemberModal';
 import EditMemberModal from '../../Modal/EditMemberModal';
 import axios from 'axios';
 import {toast} from 'react-toastify'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,Link} from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 const API = import.meta.env.VITE_API_URL;
 
@@ -487,6 +488,11 @@ const handleUpdateMember = async (updatedData) => {
           >
             + Add Member
           </Button>
+          <MuiTooltip title="Go to Home">
+              <IconButton component={Link} to="/user" sx={{ color: '#ebe0e0ff', mt: '-4px' }}>
+                <HomeFilledIcon  fontSize="large" />
+              </IconButton>
+            </MuiTooltip>
         </Box>
       </Box>
 
