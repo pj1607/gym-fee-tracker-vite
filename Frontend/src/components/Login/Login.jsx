@@ -234,7 +234,7 @@ const Login = () => {
       alt="Google"
       style={{ width: 20, marginRight: 12 }}
     />
-    Sign in with Google
+   Continue with Google
   </Box>
 </a>
 

@@ -229,7 +229,7 @@ const trimmedUsername = formData.username.trim();
 </Box>
 
 {/* Google Sign In Button */}
-<a href={`${API}/auth/google`} style={{ textDecoration: 'none' }}>
+{/* <a href={`${API}/auth/google`} style={{ textDecoration: 'none' }}>
   <Box
     mt={3}
     display="flex"
@@ -262,7 +262,7 @@ const trimmedUsername = formData.username.trim();
     />
     Register with Google
   </Box>
-</a>
+</a> */}
 
       </form>
     </Paper>
