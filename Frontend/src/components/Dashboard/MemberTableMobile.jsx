@@ -23,9 +23,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import dayjs from 'dayjs';
 import AddMemberModal from '../../Modal/AddmemberModal';
 import EditMemberModal from '../../Modal/EditMemberModal';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 const API = import.meta.env.VITE_API_URL;
+import PaymentIcon from '@mui/icons-material/Payment';
+import CancelIcon from '@mui/icons-material/Cancel';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 const MemberTableMobile = () => {
   const [data, setData] = React.useState([]);
@@ -320,9 +324,9 @@ const [loadingType, setLoadingType] = React.useState('');
       <Card key={row._id} sx={{ backgroundColor: '#1e1e1e', color: 'white' }}>
         <CardContent>
           <Typography fontWeight="bold">{row.name}</Typography>
-          <Typography variant="body2">📞 {row.phone}</Typography>
+          <Typography variant="body2"><PhoneAndroidIcon sx={{ position: 'relative', top: '6px' }}/> {row.phone}</Typography>
           <Typography variant="body2">
-            💰 Status:{' '}
+           <PaymentIcon sx={{ position: 'relative', top: '6px' }}/> Status:{' '}
             {row.status === 'Paid' ? (
               <DoneIcon fontSize="small" sx={{ color: 'green' }} />
             ) : (
@@ -331,10 +335,10 @@ const [loadingType, setLoadingType] = React.useState('');
             {row.status}
           </Typography>
           <Typography variant="body2">
-            📅 Last Paid: {row.lastPaidDate || 'N/A'}
+            <CalendarMonthIcon sx={{ position: 'relative', top: '6px' }}/> Last Paid: {row.lastPaidDate || 'N/A'}
           </Typography>
           <Typography variant="body2">
-            ❌ Unpaid For: {row.unpaidFor} month(s)
+            <CancelIcon  sx={{ position: 'relative', top: '6px' }}/> Unpaid For: {row.unpaidFor} month(s)
           </Typography>
 
           <Divider sx={{ my: 1, backgroundColor: '#555' }} />
