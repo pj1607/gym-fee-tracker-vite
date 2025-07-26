@@ -20,6 +20,7 @@ const Loginpage= () => {
       <Box
         sx={{
           width: '100%',
+
           maxWidth: 400,
         }}
       >
@@ -36,6 +37,7 @@ const Loginpage= () => {
       />
       <Box
         sx={{
+
           width: '100%',
           maxWidth: 400,
         }}

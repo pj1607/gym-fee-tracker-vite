@@ -177,6 +177,67 @@ const Login = () => {
                                 >
                                   {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'LOGIN'}
                                 </Button>
+                                <Box
+  mt={2}
+  display="flex"
+  alignItems="center"
+  justifyContent="center"
+>
+  <Box
+    sx={{
+      height: '1px',
+      backgroundColor: '#444',
+      flex: 1,
+      mx: 2,
+    }}
+  />
+  <Typography variant="body2" color="#aaa">or</Typography>
+  <Box
+    sx={{
+      height: '1px',
+      backgroundColor: '#444',
+      flex: 1,
+      mx: 2,
+    }}
+  />
+</Box>
+
+{/* Google Sign In Button */}
+<a href={`${API}/auth/google`} style={{ textDecoration: 'none' }}>
+  <Box
+    mt={3}
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    sx={{
+      backgroundColor: '#fff',
+      color: '#333',
+      borderRadius: '6px',
+      px: 3,
+      py: 1.2,
+      width: '100%',
+      maxWidth: '320px',
+      mx: 'auto',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+      border: '1px solid #ccc',
+      fontWeight: '500',
+      fontSize: '14px',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease-in-out',
+      '&:hover': {
+        backgroundColor: '#f1f1f1',
+      }
+    }}
+  >
+    <img
+      src="https://developers.google.com/identity/images/g-logo.png"
+      alt="Google"
+      style={{ width: 20, marginRight: 12 }}
+    />
+    Sign in with Google
+  </Box>
+</a>
+
         </form>
 
         <Button
@@ -192,20 +253,6 @@ const Login = () => {
         >
           Forgot Password?
         </Button>
-   <a href={`${API}/auth/google`} style={{ textDecoration: 'none' }}>
-  <div style={{
-    backgroundColor: '#4285F4',
-    color: 'white',
-    padding: '10px 20px',
-    borderRadius: '4px',
-    display: 'inline-block',
-    cursor: 'pointer'
-  }}>
-    Login with Google
-  </div>
-</a>
-
-
 
         <ForgotPasswordModal open={modalOpen} onClose={() => setModalOpen(false)} />
       </Paper></Box>

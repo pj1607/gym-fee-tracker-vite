@@ -72,7 +72,7 @@ const ProfileModal = ({ open, handleClose }) => {
         `${API}/auth/profile/update`,
         { username: userName, email },
         { headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  
   } }
       );
       setUsername(userName); 
@@ -209,7 +209,7 @@ const ProfileModal = ({ open, handleClose }) => {
             '&:hover': { backgroundColor: '#2a2a2a' },
           }}
         >
-          Forgot Password?
+        Forgot or set password?
         </Button>
 
         <ForgotPasswordModal open={modalOpen} onClose={() => setModalOpen(false)} />
