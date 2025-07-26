@@ -52,6 +52,7 @@ const [loadingType, setLoadingType] = React.useState('');
         res.data.members.map((m) => ({
           ...m,
           id: m._id,
+           lastPaidDate:  dayjs(m.lastPaidDate).format('DD MMMM YYYY')
         }))
       );
       toast.info(res.data.message);
