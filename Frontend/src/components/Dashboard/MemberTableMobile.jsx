@@ -117,7 +117,7 @@ const [loadingType, setLoadingType] = React.useState('');
         `${API}/members/${id}/undo`,
         {},
         { headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  
   } }
       );
       setData((prev) =>
@@ -154,7 +154,7 @@ const [loadingType, setLoadingType] = React.useState('');
     setLoadingType('delete');
       await axios.delete( `${API}/members/${id}`, {
         headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  
   },
       });
       setData((prev) => prev.filter((m) => m._id !== id));
@@ -190,7 +190,7 @@ const [loadingType, setLoadingType] = React.useState('');
          `${API}/members/${updatedData.id}`,
         updatedData,
         { headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`, 
   } }
       );
 
