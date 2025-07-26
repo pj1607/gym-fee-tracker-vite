@@ -15,6 +15,7 @@ import ProfileModal from '../Modal/ProfileModal.jsx';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext.jsx';
+import CloseIcon from '@mui/icons-material/Close'; 
 const API = import.meta.env.VITE_API_URL;
 
 const Navbar = () => {
@@ -200,8 +201,21 @@ const Navbar = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,
+                 position: 'relative',
               }}
             >
+               <IconButton
+      onClick={() => setOpenDrawer(false)}
+      sx={{
+        position: 'absolute',
+        top: 16,
+        right: 16,
+        color: '#fff',
+        zIndex: 1300, 
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
               {renderNavButtons(true)}
             </Box>
           </Drawer>
