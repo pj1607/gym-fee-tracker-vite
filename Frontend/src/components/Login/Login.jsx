@@ -107,6 +107,8 @@ const Login = () => {
             margin="normal"
             label="Email"
             name="email"
+             type="email"
+  autoComplete="email"
             value={formData.email}
             onChange={handleChange}
             variant="outlined"

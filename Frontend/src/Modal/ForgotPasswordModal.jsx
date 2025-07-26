@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   Box,
   Typography,
   TextField,
   Button,
-  IconButton,CircularProgress
+  IconButton,
+  CircularProgress,
+  InputAdornment
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
+
 const API = import.meta.env.VITE_API_URL;
 
 const modalStyle = {
@@ -22,7 +27,6 @@ const modalStyle = {
   bgcolor: '#1e1e1e',
   borderRadius: 2,
   boxShadow: 24,
-  p: 4,
   color: 'white',
 };
 
@@ -31,54 +35,93 @@ const ForgotPasswordModal = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
+
+  useEffect(() => {
+    if (timer > 0) {
+      const id = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+      setIntervalId(id);
+      return () => clearInterval(id);
+    } else {
+      clearInterval(intervalId);
+    }
+  }, [timer]);
+
+  const startOtpTimer = () => {
+    setTimer(120); // 2 minutes
+  };
 
   const handleNext = async () => {
     try {
       if (step === 1) {
         if (!email) return toast.info('Please enter your email');
-        
         setLoading(true);
-        await axios.post( `${API}/auth/send-otp`, { email });
+        await axios.post(`${API}/auth/send-otp`, { email });
         toast.success('OTP sent to your email');
         setStep(2);
-
+        startOtpTimer();
       } else if (step === 2) {
-        if (!otp) return toast.info('Please enter Otp');
-
+        if (!otp) return toast.info('Please enter OTP');
         setLoading(true);
-        await axios.post( `${API}/auth/check-otp`, { email, otp });
-         toast.success('OTP verified');
+        await axios.post(`${API}/auth/check-otp`, { email, otp });
+        toast.success('OTP verified');
         setStep(3);
       }
     } catch (err) {
       console.error(err);
-      toast.error(err.response.data.message || 'Something went wrong'); 
+      toast.error(err?.response?.data?.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
     }
-    finally {
-    setLoading(false); 
-  }
   };
 
   const handleSubmit = async () => {
     try {
       if (!newPassword) return toast.info('Please enter a new password');
-       
+      const trimmedEmail = email.trim();
+      const trimmedNewPassword = newPassword.trim();
+      const trimmedConfirNewPassword = confirmNewPassword.trim();
+
+      if (trimmedNewPassword !== trimmedConfirNewPassword) {
+        toast.error('Passwords do not match.');
+        return;
+      }
+
       setLoading(true);
-      await axios.post( `${API}/auth/reset-password`, {
-        email,
-        newPassword,
+      await axios.post(`${API}/auth/reset-password`, {
+        email: trimmedEmail,
+        newPassword: trimmedNewPassword,
+        confirmNewPassword: trimmedConfirNewPassword,
       });
 
       toast.success('Password reset successful!');
       handleClose();
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data?.error || 'Failed to reset password');
+      toast.error(error?.response?.data?.error || 'Failed to reset password');
+    } finally {
+      setLoading(false);
     }
-    finally {
-    setLoading(false); 
-  }
+  };
+
+  const handleResendOtp = async () => {
+    try {
+      setLoading(true);
+      await axios.post(`${API}/auth/send-otp`, { email });
+      toast.success('OTP resent successfully');
+      startOtpTimer();
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to resend OTP');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClose = () => {
@@ -86,12 +129,16 @@ const ForgotPasswordModal = ({ open, onClose }) => {
     setEmail('');
     setOtp('');
     setNewPassword('');
+    setConfirmNewPassword('');
+    setShowPassword(false);
+    setShowConfirm(false);
+    setTimer(0);
+    clearInterval(intervalId);
     onClose();
   };
 
   return (
     <Modal open={open} onClose={handleClose}>
-        
       <Box sx={modalStyle}>
         <IconButton
           onClick={handleClose}
@@ -119,28 +166,16 @@ const ForgotPasswordModal = ({ open, onClose }) => {
             <TextField
               fullWidth
               label="Email"
+              type="email"
+              autoComplete="email"
               variant="outlined"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               InputLabelProps={{ style: { color: '#aaa' } }}
-               sx={{
-              input: { backgroundColor: '#2c2c2c' },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: '#444' },
-                 '& input': {
-        color: 'white',
-        backgroundColor: '#2c2c2c',
-      },
-      '& input:-webkit-autofill': {
-        WebkitBoxShadow: '0 0 0 1000px #2c2c2c inset',
-        WebkitTextFillColor: 'white',
-        caretColor: 'white',
-      },
-              },
-            }}
+              sx={textFieldStyle}
             />
-            <Button onClick={handleNext} fullWidth variant="contained"  disabled={loading} sx={buttonStyle}>
-              {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'Send OTP'}
+            <Button onClick={handleNext} fullWidth variant="contained" disabled={loading} sx={buttonStyle}>
+              {loading ? <CircularProgress size={26} sx={{ color: 'white' }} /> : 'Send OTP'}
             </Button>
           </>
         )}
@@ -156,8 +191,16 @@ const ForgotPasswordModal = ({ open, onClose }) => {
               sx={textFieldStyle}
               InputLabelProps={{ style: { color: '#aaa' } }}
             />
-           <Button onClick={handleNext} fullWidth variant="contained"  disabled={loading} sx={buttonStyle}>
-              {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/>: 'Submit OTP'}
+            <Button onClick={handleNext} fullWidth variant="contained" disabled={loading} sx={buttonStyle}>
+              {loading ? <CircularProgress size={26} sx={{ color: 'white' }} /> : 'Submit OTP'}
+            </Button>
+            <Button
+              onClick={handleResendOtp}
+              fullWidth
+              disabled={timer > 0 || loading}
+              sx={{ mt: 1, color: '#f44336' }}
+            >
+              {timer > 0 ? `Resend in ${timer}s` : 'Resend OTP'}
             </Button>
           </>
         )}
@@ -167,20 +210,43 @@ const ForgotPasswordModal = ({ open, onClose }) => {
             <TextField
               fullWidth
               label="New Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               variant="outlined"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               sx={textFieldStyle}
-              InputLabelProps={{ style: { color: '#aaa' } ,'& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: '#444' },
-                 '& input': {
-        color: 'white',
-        backgroundColor: '#2c2c2c',
-      },  },}}
+              InputLabelProps={{ style: { color: '#aaa' } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-           <Button onClick={handleSubmit} fullWidth variant="contained"  disabled={loading} sx={buttonStyle}>
-              {loading ? <CircularProgress size={26}sx={{color: 'white', }}/> : 'Reset Password'}
+            <TextField
+              fullWidth
+              label="Confirm New Password"
+              type={showConfirm ? 'text' : 'password'}
+              variant="outlined"
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              sx={textFieldStyle}
+              InputLabelProps={{ style: { color: '#aaa' } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowConfirm(!showConfirm)} edge="end">
+                      {showConfirm ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button onClick={handleSubmit} fullWidth variant="contained" disabled={loading} sx={buttonStyle}>
+              {loading ? <CircularProgress size={26} sx={{ color: 'white' }} /> : 'Reset Password'}
             </Button>
           </>
         )}
