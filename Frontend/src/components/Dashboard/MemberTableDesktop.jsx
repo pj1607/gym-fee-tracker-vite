@@ -490,7 +490,7 @@ const handleUpdateMember = async (updatedData) => {
           </Button>
           <MuiTooltip title="Go to Home">
               <IconButton component={Link} to="/user" sx={{ color: '#ebe0e0ff', mt: '-4px' }}>
-                <HomeFilledIcon  fontSize="large" />
+                <HomeFilledIcon />
               </IconButton>
             </MuiTooltip>
         </Box>
