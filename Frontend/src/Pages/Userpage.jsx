@@ -60,7 +60,7 @@ const Userpage = () => {
   <AnimatedTypography
     variant="h4"
     gutterBottom
-    sx={{ color: '#ebe0e0ff' }}
+    sx={{ color: '#ffffffff' }}
     initial={{ opacity: 0, y: -20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -75,8 +75,8 @@ const Userpage = () => {
   </MuiTooltip>
 </Box>
 
-      <Typography variant="subtitle1" gutterBottom sx={{ color: '#8c8b8bff' }}>
-        Track your gym members and their payment status. Go digital — skip the register!
+      <Typography variant="subtitle1" gutterBottom sx={{ color: '#d8d8d8ff' }}>
+     Here's a quick view of your gym fee stats.
       </Typography>
 
       <Grid container spacing={3} my={3}>
@@ -88,7 +88,7 @@ const Userpage = () => {
               textAlign: 'center',
               backgroundColor: '#1a1a1a',
               color: '#ffffff',
-              borderTop: '4px solid #8B0000',
+              borderTop: '4px solid #736b6bff',
             }}
           >
             <Typography variant="h6">Total Members</Typography>
@@ -113,7 +113,7 @@ const Userpage = () => {
               textAlign: 'center',
               backgroundColor: '#1a1a1a',
               color: '#ffffff',
-              borderTop: '4px solid #8B0000'
+              borderTop: '4px solid #736b6bff'
             }}
           >
             <Typography variant="h6" mb={2}>
