@@ -1,9 +1,13 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true, // Allows for multiple null googleId values (for non-Google users)
+  },
   username: {
     type: String,
-    required: [true, 'Username is required'],
     trim: true,
   },
   email: {
@@ -14,17 +18,19 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters'],
+    validate: {
+      validator: function (v) {
+        // Password is required only if googleId is not set
+        return this.googleId || (v && v.length >= 6);
+      },
+      message: 'Password is required and must be at least 6 characters.',
+    },
   },
-  resetPasswordToken:{
-        type: String,
-  },
-  resetPasswordExpires:{
-        type: Date,
-  },
+  picture: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 export default User;
-
