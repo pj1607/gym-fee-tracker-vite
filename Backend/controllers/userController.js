@@ -11,8 +11,9 @@ export const registerUser = async (req, res) => {
     const username = req.body.username?.trim();
     const email = req.body.email?.trim();
     const password = req.body.password;
+    const confirmpassword = req.body.confirmpassword;
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !confirmpassword ){
       return res.status(400).json({
         error: 'Please fill in all the required details.',
         success: 'no'
@@ -150,7 +151,7 @@ export const sendOtp = async (req, res) => {
       const token = buffer.readUInt32BE(0) % 900000 + 100000;
 
       user.resetPasswordToken = token;
-      user.resetPasswordExpires = Date.now() + 	600000;
+      user.resetPasswordExpires = Date.now() + 	120000;
       await user.save();
 
       const transporter = nodemailer.createTransport({
@@ -213,9 +214,9 @@ export const checkOtp = async (req, res) => {
 //RESET PASSWORD
 export const resetPassword = async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
+    const { email, newPassword ,confirmNewPassword} = req.body;
 
-    if (!email || !newPassword) {
+    if (!email || !newPassword || !confirmNewPassword) {
       return res.status(400).json({ error: 'Email and new password are required' });
     }
 
