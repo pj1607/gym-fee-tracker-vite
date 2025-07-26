@@ -199,14 +199,22 @@ const ForgotPasswordModal = ({ open, onClose }) => {
             <Button onClick={handleNext} fullWidth variant="contained" disabled={loading} sx={buttonStyle}>
               {loading ? <CircularProgress size={26} sx={{ color: 'white' }} /> : 'Submit OTP'}
             </Button>
-            <Button
-              onClick={handleResendOtp}
-              fullWidth
-              disabled={timer > 0 || loading}
-              sx={{ mt: 1, color: '#f44336' }}
-            >
-              {timer > 0 ? `Resend OTP (${timer}s)` : 'Resend OTP'}
-            </Button>
+           <Button
+  onClick={handleResendOtp}
+  fullWidth
+  disabled={timer > 0 || loading}
+  sx={{
+    mt: 1,
+    color: 'white',
+    fontWeight: 'bold',
+    '&:hover': {
+      color: '#f44336',
+    },
+  }}
+>
+  {timer > 0 ? `Resend OTP (${timer}s)` : 'Resend OTP'}
+</Button>
+
           </>
         )}
 
