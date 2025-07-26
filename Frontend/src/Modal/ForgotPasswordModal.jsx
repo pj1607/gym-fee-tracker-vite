@@ -219,11 +219,9 @@ const ForgotPasswordModal = ({ open, onClose }) => {
   disabled={timer > 0 || loading}
   sx={{
     mt: 1,
-    color: 'white',
+    color: '#bb241aff',
     fontWeight: 'bold',
-    '&:hover': {
-      color: '#f44336',
-    },
+    
     '&.Mui-disabled': {
       color: 'white', 
       opacity: 0.5,   
