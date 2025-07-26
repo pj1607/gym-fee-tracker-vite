@@ -248,7 +248,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" sx={{ color: 'white' }}>
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -267,7 +267,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={() => setShowConfirm(!showConfirm)} edge="end">
+                    <IconButton onClick={() => setShowConfirm(!showConfirm)} edge="end"sx={{ color: 'white' }}>
                       {showConfirm ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
