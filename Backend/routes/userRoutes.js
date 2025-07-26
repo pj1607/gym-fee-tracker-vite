@@ -28,13 +28,18 @@ const googleClientSecret = process.env.NODE_ENV === 'production'
   ? process.env.GOOGLE_CLIENT_SECRET_PROD
   : process.env.GOOGLE_CLIENT_SECRET_LOCAL;
 
+  const googleCallbackURL = process.env.NODE_ENV === 'production'
+  ? 'https://gym-fee-tracker-vite.onrender.com/auth/google/callback'
+  : 'http://localhost:4000/auth/google/callback';
+
 
 // Google OAuth Setup
 passport.use(new GoogleStrategy({
     clientID: googleClientId,
     clientSecret: googleClientSecret,
-    callbackURL: "/auth/google/callback",
+    callbackURL: googleCallbackURL,
   },
+  
   async (accessToken, refreshToken, profile, done) => {
     try {
       const googleId = profile.id;
