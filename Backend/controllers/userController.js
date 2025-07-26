@@ -116,7 +116,7 @@ export const loginUser = async (req, res) => {
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: '2d' }  // Token expires in 2 days
+      { expiresIn: '2d' } 
     );
 
     res.status(200).json({
@@ -126,7 +126,7 @@ export const loginUser = async (req, res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
-        token  // Send the token in the response body
+        token 
       }
     });
 
@@ -166,7 +166,7 @@ export const sendOtp = async (req, res) => {
         from: `"Gym Fee Tracker" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: 'Password Reset OTP',
-        html: `<p>Your OTP is <b>${token}</b>. It is valid for 10 minutes.</p>`,
+        html: `<p>Your OTP is <b>${token}</b>. It is valid for 2 minutes.</p>`,
       };
 
       await transporter.sendMail(mailOptions);
