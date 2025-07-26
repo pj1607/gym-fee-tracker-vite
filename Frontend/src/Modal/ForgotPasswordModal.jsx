@@ -14,6 +14,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import isEmail from 'validator/lib/isEmail';
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -55,13 +56,17 @@ const ForgotPasswordModal = ({ open, onClose }) => {
   }, [timer]);
 
   const startOtpTimer = () => {
-    setTimer(120); // 2 minutes
+    setTimer(120); 
   };
 
   const handleNext = async () => {
     try {
       if (step === 1) {
         if (!email) return toast.info('Please enter your email');
+
+      if (!isEmail(email)) {
+  return toast.error('Please enter a valid email address');
+}
         setLoading(true);
         await axios.post(`${API}/auth/send-otp`, { email });
         toast.success('OTP sent to your email');
@@ -76,7 +81,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
       }
     } catch (err) {
       console.error(err);
-      toast.error(err?.response?.data?.message || 'Something went wrong');
+      toast.error(err?.response?.data?.message || err?.response?.data?.error||'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -200,7 +205,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
               disabled={timer > 0 || loading}
               sx={{ mt: 1, color: '#f44336' }}
             >
-              {timer > 0 ? `Resend in ${timer}s` : 'Resend OTP'}
+              {timer > 0 ? `Resend OTP (${timer}s)` : 'Resend OTP'}
             </Button>
           </>
         )}
