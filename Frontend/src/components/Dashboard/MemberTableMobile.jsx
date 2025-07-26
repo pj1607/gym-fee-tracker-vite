@@ -324,9 +324,9 @@ const [loadingType, setLoadingType] = React.useState('');
       <Card key={row._id} sx={{ backgroundColor: '#1e1e1e', color: 'white' }}>
         <CardContent>
           <Typography fontWeight="bold">{row.name}</Typography>
-          <Typography variant="body2"><PhoneAndroidIcon sx={{ position: 'relative', top: '6px' }}/> {row.phone}</Typography>
+          <Typography variant="body2"><PhoneAndroidIcon fontSize="small" sx={{ position: 'relative', top: '6px' }}/> {row.phone}</Typography>
           <Typography variant="body2">
-           <PaymentIcon sx={{ position: 'relative', top: '6px' }}/> Status:{' '}
+           <PaymentIcon fontSize="small" sx={{ position: 'relative', top: '6px' }}/> Status:{' '}
             {row.status === 'Paid' ? (
               <DoneIcon fontSize="small" sx={{ color: 'green' }} />
             ) : (
@@ -335,10 +335,10 @@ const [loadingType, setLoadingType] = React.useState('');
             {row.status}
           </Typography>
           <Typography variant="body2">
-            <CalendarMonthIcon sx={{ position: 'relative', top: '6px' }}/> Last Paid: {row.lastPaidDate || 'N/A'}
+            <CalendarMonthIcon fontSize="small" sx={{ position: 'relative', top: '6px' }}/> Last Paid: {row.lastPaidDate || 'N/A'}
           </Typography>
           <Typography variant="body2">
-            <CancelIcon  sx={{ position: 'relative', top: '6px' }}/> Unpaid For: {row.unpaidFor} month(s)
+            <CancelIcon fontSize="small" sx={{ position: 'relative', top: '6px' }}/> Unpaid For: {row.unpaidFor} month(s)
           </Typography>
 
           <Divider sx={{ my: 1, backgroundColor: '#555' }} />
