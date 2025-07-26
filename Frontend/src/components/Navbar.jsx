@@ -10,7 +10,7 @@ import {
   CircularProgress
 } from '@mui/material';
 import Logo from '../assets/images/logo.png';
-import MenuIcon from '@mui/icons-material/Menu';  // Added MenuIcon import
+import MenuIcon from '@mui/icons-material/Menu'; 
 import ProfileModal from '../Modal/ProfileModal.jsx';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -31,11 +31,11 @@ const Navbar = () => {
     try {
       setLoading(true);
       await axios.post(
-        `${API}/auth/logout`, // Corrected URL template string
+        `${API}/auth/logout`,
         {},
         {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`, // Corrected Bearer token syntax
+            'Authorization': `Bearer ${localStorage.getItem('token')}`, 
           },
         }
       );
@@ -47,7 +47,7 @@ const Navbar = () => {
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false); 
     }
   };
 
@@ -175,7 +175,7 @@ const Navbar = () => {
               sx={{
                 position: 'absolute',
                 top: 16,
-                left: 16,
+                right: 16,
                 color: '#fff',
                 zIndex: 1200,
               }}
@@ -186,7 +186,7 @@ const Navbar = () => {
 
           {/* Drawer for mobile */}
           <Drawer
-            anchor="left"
+            anchor="right"
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
           >
@@ -206,7 +206,6 @@ const Navbar = () => {
             </Box>
           </Drawer>
 
-          {/* Buttons in desktop nav */}
           {!isMobile && renderNavButtons(false)}
         </Stack>
       </Stack>
