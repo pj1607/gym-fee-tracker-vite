@@ -120,7 +120,7 @@ const Login = () => {
           }}
         >
           <Typography variant="body2" fontWeight="bold" gutterBottom>
-            ⚠️ Google Login is not supported in in-app browsers (Instagram, Facebook, LinkedIn, Twitter).
+            ⚠️ Continue with Google is not supported in in-app browsers (LinkedIn, Instagram, Facebook, Twitter).
           </Typography>
           <Typography variant="body2">
             You can use email & password below to register or open in Chrome/Safari for Google login.
