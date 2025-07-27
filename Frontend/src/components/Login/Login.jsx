@@ -37,6 +37,14 @@ const Login = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [inAppBrowser, setInAppBrowser] = useState(false);
+
+  useEffect(() => {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isInAppBrowser = /FBAN|FBAV|Instagram|LinkedIn|Twitter|Messenger/i.test(ua);
+    setInAppBrowser(isInAppBrowser);
+  }, []);
+
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     
@@ -100,7 +108,25 @@ const Login = () => {
         <Typography variant="h5" mb={3} align="center" fontWeight="bold">
           Login
         </Typography>
-
+              {inAppBrowser && (
+        <Box
+          sx={{
+            mt: 2,
+            p: 2,
+            backgroundColor: '#2c2c2c',
+            borderRadius: 2,
+            color: 'white',
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="body2" fontWeight="bold" gutterBottom>
+            ⚠️ Google Login is not supported in in-app browsers (Instagram, Facebook, LinkedIn, Twitter).
+          </Typography>
+          <Typography variant="body2">
+            You can use email & password below to register or open in Chrome/Safari for Google login.
+          </Typography>
+        </Box>
+      )}
         <form onSubmit={handleLogin}>
           <TextField
             fullWidth
