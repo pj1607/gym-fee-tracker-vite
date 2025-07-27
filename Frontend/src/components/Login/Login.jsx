@@ -28,12 +28,14 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
-const location = useLocation();
+
 
 const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const location = useLocation();
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
