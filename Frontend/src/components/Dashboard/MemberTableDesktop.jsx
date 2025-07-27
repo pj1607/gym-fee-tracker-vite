@@ -27,6 +27,9 @@ import { useNavigate ,Link} from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 const API = import.meta.env.VITE_API_URL;
 
+import ConfirmModal from '../../Modal/ConfirmModal';
+
+
 
 
 const fadeIn = keyframes`
@@ -46,6 +49,10 @@ const [selectedMember, setSelectedMember] = React.useState(null);
 const [loading, setLoading] = React.useState(false);
 const [loadingId, setLoadingId] = React.useState(null);
 const [loadingType, setLoadingType] = React.useState('');
+
+const [confirmAction, setConfirmAction] = 
+React.useState({ open: false, title: '', description: '', onConfirm: null });
+
 
 
 
@@ -317,7 +324,15 @@ const handleUpdateMember = async (updatedData) => {
   <Button
     variant="contained"
     size="small"
-    onClick={() => markAsPaid(row.id)}
+   onClick={() =>
+  setConfirmAction({
+    open: true,
+    title: 'Confirm Payment',
+    description: 'Are you sure you want to mark this member as paid?',
+    onConfirm: () => markAsPaid(row.id)
+  })
+}
+
     startIcon={
       loadingId === row.id && loadingType === 'pay' ? (
         <CircularProgress size={18} sx={{ color: 'white' }} />
@@ -340,7 +355,25 @@ const handleUpdateMember = async (updatedData) => {
 ) : (
   <Button
     size="small"
-    onClick={() => handleUndoMarkAsPaid(row.id)}
+onClick={() =>
+  setConfirmAction({
+    open: true,
+    title: 'Undo Payment',
+    description: (
+      <>
+        Are you sure you want to undo this payment?
+        <br />
+        <span style={{ display: 'block', marginTop: '8px', color: '#aaa' }}>
+          (This option is only for cases where the member was marked as paid accidentally)
+        </span>
+      </>
+    ),
+    onConfirm: () => handleUndoMarkAsPaid(row.id)
+  })
+}
+
+
+
     startIcon={
       loadingId === row.id && loadingType === 'undo' ? (
         <CircularProgress size={18} sx={{ color: 'white' }} />
@@ -375,7 +408,15 @@ const handleUpdateMember = async (updatedData) => {
        
            <Button
   size="small"
-  onClick={() => handleDeleteMember(row.id)}
+  onClick={() =>
+  setConfirmAction({
+    open: true,
+    title: 'Delete Member',
+    description: 'This action is irreversible. Are you sure you want to delete this member?',
+    onConfirm: () => handleDeleteMember(row.id)
+  })
+}
+
   startIcon={
     loadingId === row._id && loadingType === 'delete' ? (
       <CircularProgress size={20} sx={{ color: 'white' }} />
@@ -575,6 +616,16 @@ const handleUpdateMember = async (updatedData) => {
   handleClose={handleCloseEditModal}
   member={selectedMember}
   onUpdate={handleUpdateMember}
+/>
+<ConfirmModal
+  open={confirmAction.open}
+  title={confirmAction.title}
+  description={confirmAction.description}
+  onConfirm={() => {
+    confirmAction.onConfirm?.();
+    setConfirmAction({ ...confirmAction, open: false });
+  }}
+  onCancel={() => setConfirmAction({ ...confirmAction, open: false })}
 />
 
     </Box>

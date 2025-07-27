@@ -31,6 +31,8 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
+import ConfirmModal from '../../Modal/ConfirmModal';
+
 const MemberTableMobile = () => {
   const [data, setData] = React.useState([]);
   const [filterStatus, setFilterStatus] = React.useState('All');
@@ -42,6 +44,9 @@ const MemberTableMobile = () => {
   const [loading, setLoading] = React.useState(false);
   const [loadingId, setLoadingId] = React.useState(null);
 const [loadingType, setLoadingType] = React.useState('');
+
+const [confirmAction, setConfirmAction] = 
+React.useState({ open: false, title: '', description: '', onConfirm: null });
 
 
   const fetchMembers = async () => {
@@ -78,7 +83,7 @@ const [loadingType, setLoadingType] = React.useState('');
     fetchMembers();
   }, []);
 
-  const handleMarkAsPaid = async (id) => {
+  const markAsPaid = async (id) => {
     try {
     setLoadingId(id);
     setLoadingType('pay');
@@ -116,7 +121,7 @@ const [loadingType, setLoadingType] = React.useState('');
 
   };
 
-  const handleUndo = async (id) => {
+  const handleUndoMarkAsPaid= async (id) => {
     try {
        setLoadingId(id);
     setLoadingType('undo');
@@ -155,7 +160,7 @@ const [loadingType, setLoadingType] = React.useState('');
   }
   };
 
-  const handleDelete = async (id) => {
+  const handleDeleteMember = async (id) => {
     try {
     setLoadingId(id);
     setLoadingType('delete');
@@ -348,7 +353,14 @@ const [loadingType, setLoadingType] = React.useState('');
   <Button
     variant="contained"
     size="small"
-    onClick={() => handleMarkAsPaid(row._id)}
+    onClick={() =>
+  setConfirmAction({
+    open: true,
+    title: 'Confirm Payment',
+    description: 'Are you sure you want to mark this member as paid?',
+    onConfirm: () => markAsPaid(row.id)
+  })
+}
     startIcon={
       loadingId === row._id && loadingType === 'pay' ? (
         <CircularProgress size={20} sx={{ color: 'white' }} />
@@ -363,7 +375,22 @@ const [loadingType, setLoadingType] = React.useState('');
 ) : (
   <Button
     size="small"
-    onClick={() => handleUndo(row._id)}
+   onClick={() =>
+  setConfirmAction({
+    open: true,
+    title: 'Undo Payment',
+    description: (
+      <>
+        Are you sure you want to undo this payment?
+        <br />
+        <span style={{ display: 'block', marginTop: '8px', color: '#aaa' }}>
+          (This option is only for cases where the member was marked as paid accidentally)
+        </span>
+      </>
+    ),
+    onConfirm: () => handleUndoMarkAsPaid(row.id)
+  })
+}
     startIcon={
       loadingId === row._id && loadingType === 'undo' ? (
         <CircularProgress size={20} sx={{ color: 'white' }} />
@@ -380,7 +407,14 @@ const [loadingType, setLoadingType] = React.useState('');
 
            <Button
   size="small"
-  onClick={() => handleDelete(row._id)}
+ onClick={() =>
+  setConfirmAction({
+    open: true,
+    title: 'Delete Member',
+    description: 'This action is irreversible. Are you sure you want to delete this member?',
+    onConfirm: () => handleDeleteMember(row.id)
+  })
+}
   startIcon={
     loadingId === row._id && loadingType === 'delete' ? (
       <CircularProgress size={20} sx={{ color: 'white' }} />
@@ -422,6 +456,17 @@ const [loadingType, setLoadingType] = React.useState('');
         member={selectedMember}
         onUpdate={handleUpdateMember}
       />
+      <ConfirmModal
+        open={confirmAction.open}
+        title={confirmAction.title}
+        description={confirmAction.description}
+        onConfirm={() => {
+          confirmAction.onConfirm?.();
+          setConfirmAction({ ...confirmAction, open: false });
+        }}
+        onCancel={() => setConfirmAction({ ...confirmAction, open: false })}
+      />
+      
     </Box>
   );
 };
