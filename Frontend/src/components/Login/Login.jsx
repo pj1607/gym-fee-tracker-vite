@@ -36,6 +36,12 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [Gloading, GsetLoading] = useState(false);
+
+  React.useEffect(() => {
+  setLoading(false); 
+  GsetLoading(false); 
+}, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -58,7 +64,7 @@ const Login = () => {
       password: trimmedPassword,
     },
       { headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`, 
   } }
     );
     
@@ -204,14 +210,12 @@ const Login = () => {
   />
 </Box>
 
-{/* Google Sign In Button */}
-{/* Google Sign In Button */}
 <Button
   onClick={() => {
-    setLoading(true); // show spinner
+    GsetLoading(true); 
     setTimeout(() => {
       window.location.href = `${API}/auth/google`;
-    }, 100); // give React time to show spinner
+    }, 150);
   }}
   fullWidth
   sx={{
@@ -237,7 +241,7 @@ const Login = () => {
       backgroundColor: '#f1f1f1',
     }
   }}
-  disabled={loading}
+  disabled={Gloading}
 >
   {loading ? (
     <CircularProgress size={22} sx={{ color: '#333' }} />
