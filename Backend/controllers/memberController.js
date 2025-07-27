@@ -1,5 +1,6 @@
 import Member from '../models/memberModel.js';
 import mongoose from 'mongoose';
+import dayjs from "dayjs";
 
 
 // ALL-MEMBERS
@@ -135,8 +136,8 @@ export const undoPaymentStatus = async (req, res) => {
       { _id: objectId, createdBy: req.user._id },
       {
         status: "Unpaid",
-        unpaidMonths: member.previousUnpaidMonths ?? 1,
-        lastPaidDate: member.previousLastPaidDate ?? null
+        unpaidMonths: member.previousUnpaidMonths ?? 0,
+        lastPaidDate: member.previousLastPaidDate ?? dayjs().format('DD MMMM YYYY')
       },
       { new: true }
     );
