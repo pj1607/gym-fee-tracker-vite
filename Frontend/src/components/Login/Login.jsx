@@ -1,6 +1,6 @@
 // Login.js
-import React, { useState, useEffect } from 'react';
-import { useNavigate,useLocation  } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -10,17 +10,16 @@ import {
   InputAdornment,
   IconButton,
   keyframes,
-  useTheme,
-  CircularProgress
+  useTheme,CircularProgress
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ForgotPasswordModal from '../../Modal/ForgotPasswordModal.jsx';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import {toast} from 'react-toastify'
+import axios from "axios";
 import { useAuth } from '../../context/AuthContext.jsx';
-
 const API = import.meta.env.VITE_API_URL;
+
 
 // Animation
 const fadeIn = keyframes`
@@ -28,83 +27,66 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
-
-
 const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const location = useLocation();
-
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [Gloading, GsetLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(false);
-    GsetLoading(false);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const hasGoogleParams = urlParams.get('code') || urlParams.get('error');
-    if (!hasGoogleParams) {
-      GsetLoading(false);
-    }
-  }, [location.search]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    
   };
+  
 
+ 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const trimmedEmail = formData.email.trim();
+  e.preventDefault();
+  try {
+    const trimmedEmail = formData.email.trim();
       const trimmedPassword = formData.password.trim();
 
-      setLoading(true);
-      const response = await axios.post(
-        `${API}/auth/login`,
-        { email: trimmedEmail, password: trimmedPassword },
-        {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+    setLoading(true);
+    const response = await axios.post(
+       `${API}/auth/login`,
+       {
+      email: trimmedEmail,
+      password: trimmedPassword,
+    },
+      { headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+  } }
+    );
+    
+     const { token, username } = response.data.data;
 
-      const { token, username } = response.data.data;
       login(token, username);
       toast.success(`Welcome back, ${username}!`);
-      navigate('/user', { replace: true });
+      navigate('/user', { replace: true }); 
 
-    } catch (error) {
-      const errormessage =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        'Something went wrong';
-      toast.error(errormessage);
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error) {
+   
+    const errormessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      'Something went wrong';
 
-  const handleGoogleLogin = async () => {
-    GsetLoading(true);
-    try {
-      await axios.get(`${API}/auth/ping`, { timeout: 300 });
-      window.location.href = `${API}/auth/google`;
-    } catch (err) {
-      setTimeout(() => {
-        window.location.href = `${API}/auth/google`;
-      }, 500);
-    }
-  };
+
+    toast.error(errormessage);
+  }
+  finally {
+    setLoading(false); 
+  }
+};
+
 
   return (
-    <Box>
+     <Box>
+      {/* Login */}
       <Paper
         elevation={8}
         sx={{
@@ -125,8 +107,8 @@ const Login = () => {
             margin="normal"
             label="Email"
             name="email"
-            type="email"
-            autoComplete="email"
+             type="email"
+  autoComplete="email"
             value={formData.email}
             onChange={handleChange}
             variant="outlined"
@@ -136,15 +118,15 @@ const Login = () => {
               input: { backgroundColor: '#2c2c2c' },
               '& .MuiOutlinedInput-root': {
                 '& fieldset': { borderColor: '#444' },
-                '& input': {
-                  color: 'white',
-                  backgroundColor: '#2c2c2c',
-                },
-                '& input:-webkit-autofill': {
-                  WebkitBoxShadow: '0 0 0 1000px #2c2c2c inset',
-                  WebkitTextFillColor: 'white',
-                  caretColor: 'white',
-                },
+                 '& input': {
+        color: 'white',
+        backgroundColor: '#2c2c2c',
+      },
+      '& input:-webkit-autofill': {
+        WebkitBoxShadow: '0 0 0 1000px #2c2c2c inset',
+        WebkitTextFillColor: 'white',
+        caretColor: 'white',
+      },
               },
             }}
           />
@@ -180,79 +162,84 @@ const Login = () => {
               },
             }}
           />
+           <Button                 type="submit"
+                                  variant="contained"
+                                  disabled={loading}
+                                  fullWidth
+                                  sx={{
+                                    background: 'linear-gradient(45deg, #d32f2f, #b71c1c)',
+                                    color: '#fff',
+                                    fontWeight: 'bold',
+                                    transition: 'all 0.3s ease-in-out',
+                                    '&:hover': {
+                                      background: 'linear-gradient(45deg, #b71c1c, #7f0000)',
+                                      transform: 'scale(1.03)',
+                                    },
+                                  }}
+                                >
+                                  {loading ?  <CircularProgress size={26}sx={{color: 'white', }}/> : 'LOGIN'}
+                                </Button>
+                                <Box
+  mt={2}
+  display="flex"
+  alignItems="center"
+  justifyContent="center"
+>
+  <Box
+    sx={{
+      height: '1px',
+      backgroundColor: '#444',
+      flex: 1,
+      mx: 2,
+    }}
+  />
+  <Typography variant="body2" color="#aaa">or</Typography>
+  <Box
+    sx={{
+      height: '1px',
+      backgroundColor: '#444',
+      flex: 1,
+      mx: 2,
+    }}
+  />
+</Box>
 
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={loading}
-            fullWidth
-            sx={{
-              background: 'linear-gradient(45deg, #d32f2f, #b71c1c)',
-              color: '#fff',
-              fontWeight: 'bold',
-              transition: 'all 0.3s ease-in-out',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #b71c1c, #7f0000)',
-                transform: 'scale(1.03)',
-              },
-            }}
-          >
-            {loading ? (
-              <CircularProgress size={26} sx={{ color: 'white' }} />
-            ) : (
-              'LOGIN'
-            )}
-          </Button>
+{/* Google Sign In Button */}
+<a href={`${API}/auth/google`} style={{ textDecoration: 'none' }}>
+  <Box
+    mt={3}
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    sx={{
+      backgroundColor: '#fff',
+      color: '#333',
+      borderRadius: '6px',
+      px: 3,
+      py: 1.2,
+      width: '100%',
+      maxWidth: '320px',
+      mx: 'auto',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+      border: '1px solid #ccc',
+      fontWeight: '500',
+      fontSize: '14px',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease-in-out',
+      '&:hover': {
+        backgroundColor: '#f1f1f1',
+      }
+    }}
+  >
+    <img
+      src="https://developers.google.com/identity/images/g-logo.png"
+      alt="Google"
+      style={{ width: 20, marginRight: 12 }}
+    />
+   Continue with Google
+  </Box>
+</a>
 
-          {/* OR Divider */}
-          <Box mt={2} display="flex" alignItems="center" justifyContent="center">
-            <Box sx={{ height: '1px', backgroundColor: '#444', flex: 1, mx: 2 }} />
-            <Typography variant="body2" color="#aaa">or</Typography>
-            <Box sx={{ height: '1px', backgroundColor: '#444', flex: 1, mx: 2 }} />
-          </Box>
-
-          {/* Google Button */}
-          <Button
-            onClick={handleGoogleLogin}
-            fullWidth
-            sx={{
-              mt: 3,
-              backgroundColor: '#fff',
-              color: '#333',
-              borderRadius: '6px',
-              px: 3,
-              py: 1.2,
-              width: '100%',
-              maxWidth: '320px',
-              mx: 'auto',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-              border: '1px solid #ccc',
-              fontWeight: '500',
-              fontSize: '14px',
-              textTransform: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 1.5,
-              '&:hover': {
-                backgroundColor: '#f1f1f1',
-              },
-            }}
-            disabled={Gloading}
-          >
-            {Gloading ? (
-              <CircularProgress size={22} sx={{ color: '#333' }} />
-            ) : (
-              <>
-                <img
-                  src="https://developers.google.com/identity/images/g-logo.png"
-                  alt="Google"
-                  style={{ width: 20 }}
-                />
-                Continue with Google
-              </>
-            )}
-          </Button>
         </form>
 
         <Button
@@ -270,8 +257,7 @@ const Login = () => {
         </Button>
 
         <ForgotPasswordModal open={modalOpen} onClose={() => setModalOpen(false)} />
-      </Paper>
-    </Box>
+      </Paper></Box>
   );
 };
 
