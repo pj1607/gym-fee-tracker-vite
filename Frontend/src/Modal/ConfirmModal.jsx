@@ -6,10 +6,10 @@ import {
   DialogActions,
   Button,
   Typography,
-  useMediaQuery,
   useTheme,
-  Box
+  Box,
 } from '@mui/material';
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 const ConfirmModal = ({ open, title, description, onConfirm, onCancel }) => {
   const theme = useTheme();
@@ -20,8 +20,7 @@ const ConfirmModal = ({ open, title, description, onConfirm, onCancel }) => {
       onClose={onCancel}
       PaperProps={{
         sx: {
-         height: { xs: '60vh'},
-
+          height: { xs: '60vh' },
           bgcolor: '#1a1a1a',
           color: '#fff',
           borderRadius: 2,
@@ -33,9 +32,19 @@ const ConfirmModal = ({ open, title, description, onConfirm, onCancel }) => {
       <DialogTitle sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: '1.25rem' }}>
         {title}
       </DialogTitle>
+
       <DialogContent>
-        <Typography sx={{ color: '#ccc', textAlign: 'center' }}>{description}</Typography>
+       
+        <Typography sx={{ color: '#ccc', textAlign: 'center' }}>
+          {description}
+        </Typography>
+         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 ,mt:5}}>
+          <WarningRoundedIcon
+            sx={{ fontSize: 120, color: '#fffefdff' }}
+          />
+        </Box>
       </DialogContent>
+
       <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
         <Button
           onClick={onCancel}
