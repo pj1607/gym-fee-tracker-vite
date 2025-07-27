@@ -11,6 +11,10 @@ import User from '../models/userModel.js'
 
 const router = express.Router();
 
+router.get('/ping', (req, res) => {
+  res.status(200).json({ message: 'pong' });
+});
+
 router.post('/signup', registerUser);
 router.post('/login', loginUser);
 router.post('/send-otp', sendOtp);
