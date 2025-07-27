@@ -1,6 +1,6 @@
 // Login.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation  } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -28,6 +28,8 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
+const location = useLocation();
+
 const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -48,7 +50,7 @@ const Login = () => {
     if (!hasGoogleParams) {
       GsetLoading(false);
     }
-  }, []);
+  }, [location.search]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
