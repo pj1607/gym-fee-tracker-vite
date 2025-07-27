@@ -39,7 +39,7 @@ const Login = () => {
 
   const [inAppBrowser, setInAppBrowser] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     const isInAppBrowser = /FBAN|FBAV|Instagram|LinkedIn|Twitter|Messenger/i.test(ua);
     setInAppBrowser(isInAppBrowser);
