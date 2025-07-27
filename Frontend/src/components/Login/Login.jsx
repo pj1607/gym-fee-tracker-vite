@@ -243,7 +243,7 @@ const Login = () => {
   }}
   disabled={Gloading}
 >
-  {loading ? (
+  {Gloading ? (
     <CircularProgress size={22} sx={{ color: '#333' }} />
   ) : (
     <>
