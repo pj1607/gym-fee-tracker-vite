@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 // ALL-MEMBERS
 export const allMembers = async (req, res) => {
   try {
-  const members = await Member.find({ createdBy: req.user._id });
+  const members = await Member.find({ createdBy: req.user._id }).sort({ createdAt: -1 });;
 
     const now = new Date();
 
