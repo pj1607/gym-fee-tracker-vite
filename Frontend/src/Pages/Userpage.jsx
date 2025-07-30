@@ -56,6 +56,42 @@ const Userpage = () => {
 
   return (
     <Box sx={{ p: 4, minHeight: '100vh' }}>
+        <Box mb={3}>
+  <Paper
+    elevation={3}
+    sx={{
+      p: 2,
+      backgroundColor: '#222',
+      color: '#ddd',
+      borderLeft: '4px solid #E89B4A',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 2,
+    }}
+  >
+    <Box>
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        Auto Membership Status Update
+      </Typography>
+      <Typography variant="body2">
+        Member payment statuses are automatically checked and updated every 30 days.
+      </Typography>
+      <Typography variant="caption" sx={{ color: '#aaa' }}>
+        Next update expected: {/* logic below */}
+        {(() => {
+          const last = localStorage.getItem('lastUpdate') || new Date();
+          const nextDate = new Date(new Date(last).getTime() + 30 * 24 * 60 * 60 * 1000);
+          return nextDate.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+        })()}
+      </Typography>
+    </Box>
+  </Paper>
+</Box>
+
      <Box display="flex" alignItems="center" gap={1}>
   <AnimatedTypography
     variant="h4"
@@ -154,6 +190,7 @@ const Userpage = () => {
           </Paper>
         </Grid>
       </Grid>
+    
     </Box>
   );
 };
