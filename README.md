@@ -15,16 +15,3 @@ Go digital — skip the register!
 ## 📸 Preview
 
 ![App Screenshot](/Frontend/src/assets/images/gym-fee-tracker-preview.png)
-
-
-
-
----
-
-## 🛠️ Tech Stack
-
-- React.js
-- Material UI
-- Node.js
-- Express.js
-- MongoDB
