@@ -204,6 +204,7 @@ const Signup = () => {
 const fieldStyle = {
   input: { color: 'white', backgroundColor: '#2c2c2c' },
   label: { color: '#aaa' },
+   '& label.Mui-focused': { color: '#d8c7b2' }, 
   '& .MuiOutlinedInput-root': {
     '& fieldset': { borderColor: '#444' },
     '& input': {
