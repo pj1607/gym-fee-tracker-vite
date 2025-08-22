@@ -19,6 +19,9 @@ import {toast} from 'react-toastify'
 import axios from "axios";
 import { useAuth } from '../../context/AuthContext.jsx';
 const API = import.meta.env.VITE_API_URL;
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 
 // Animation
@@ -31,11 +34,21 @@ const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { login } = useAuth();
+  
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+   const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success', 
+  });
+  
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   const [inAppBrowser, setInAppBrowser] = useState(false);
 
@@ -66,14 +79,13 @@ const Login = () => {
       password: trimmedPassword,
     },
       { headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  
   } }
     );
     
      const { token, username } = response.data.data;
 
       login(token, username);
-      toast.success(`Welcome back, ${username}!`);
       navigate('/user', { replace: true }); 
 
   } catch (error) {
@@ -84,7 +96,11 @@ const Login = () => {
       'Something went wrong';
 
 
-    toast.error(errormessage);
+   setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
   }
   finally {
     setLoading(false); 
@@ -283,7 +299,24 @@ const Login = () => {
         </Button>
 
         <ForgotPasswordModal open={modalOpen} onClose={() => setModalOpen(false)} />
-      </Paper></Box>
+      </Paper>
+       <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </MuiAlert>
+      </Snackbar>
+      </Box>
   );
 };
 

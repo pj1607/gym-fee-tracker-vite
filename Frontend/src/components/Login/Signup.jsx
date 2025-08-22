@@ -17,6 +17,9 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext.jsx';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -33,8 +36,18 @@ const Signup = () => {
     confirmPassword: '',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false); // 🔥 very small change
+  const [showConfirm, setShowConfirm] = useState(false); 
   const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+  open: false,
+  message: '',
+  severity: 'success', 
+});
+
+const handleCloseSnackbar = () => {
+  setSnackbar({ ...snackbar, open: false });
+};
+
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -56,29 +69,39 @@ const Signup = () => {
       const trimmedPassword = formData.password.trim();
       const trimmedConfirmPassword = formData.confirmPassword.trim();
 
-      if (trimmedPassword !== trimmedConfirmPassword) {
-        toast.error("Passwords do not match.");
-        return;
-      }
+if (trimmedPassword !== trimmedConfirmPassword) {
+  setSnackbar({
+    open: true,
+    message: "Passwords do not match.",
+    severity: "error",
+  });
+  return;
+}
 
       setLoading(true);
       const response = await axios.post(`${API}/auth/signup`, {
         email: trimmedEmail,
         username: trimmedUsername,
         password: trimmedPassword,
-        confirmPassword: trimmedConfirmPassword,
+        confirmpassword: trimmedConfirmPassword,
       });
 
       const { token, username } = response.data.data;
       login(token, username);
-      toast.success(`Welcome, ${username}!`);
+      
       navigate('/user', { replace: true });
     } catch (error) {
       const errormessage =
         error.response?.data?.error ||
         error.response?.data?.message ||
         'Something went wrong';
-      toast.error(errormessage);
+
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
+
     } finally {
       setLoading(false);
     }
@@ -197,7 +220,25 @@ const Signup = () => {
           {loading ? <CircularProgress size={26} sx={{ color: 'white' }} /> : 'REGISTER'}
         </Button>
       </form>
+      <Snackbar
+  open={snackbar.open}
+  autoHideDuration={3000}
+  onClose={handleCloseSnackbar}
+  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+>
+  <MuiAlert
+    elevation={6}
+    variant="filled"
+    onClose={handleCloseSnackbar}
+    severity={snackbar.severity}
+    sx={{ width: '100%' }}
+  >
+    {snackbar.message}
+  </MuiAlert>
+</Snackbar>
+
     </Paper>
+    
   );
 };
 

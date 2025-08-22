@@ -29,6 +29,10 @@ const API = import.meta.env.VITE_API_URL;
 
 import ConfirmModal from '../../Modal/ConfirmModal';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+
 
 
 
@@ -49,6 +53,16 @@ const [selectedMember, setSelectedMember] = React.useState(null);
 const [loading, setLoading] = React.useState(false);
 const [loadingId, setLoadingId] = React.useState(null);
 const [loadingType, setLoadingType] = React.useState('');
+  const [snackbar, setSnackbar] = React.useState({
+  open: false,
+  message: '',
+  severity: 'success', 
+});
+
+const handleCloseSnackbar = () => {
+  setSnackbar({ ...snackbar, open: false });
+};
+
 
 const [confirmAction, setConfirmAction] = 
 React.useState({ open: false, title: '', description: '', onConfirm: null });
@@ -99,14 +113,18 @@ const CustomNoRowsOverlay = () => (
     lastPaidDate:  dayjs(m.lastPaidDate).format('DD MMMM YYYY')
   }))
 );
-toast.info(res.data.message);
     } catch (error) {
       const errormessage =
             error.response?.data?.error ||
             error.response?.data?.message ||
             'Failed to get members';
       
-          toast.error(errormessage);
+        
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
     }
     finally {
     setLoading(false);
@@ -161,7 +179,12 @@ const markAsPaid = async (id) => {
          error.response?.data?.message ||
          'Failed to update payment status';
    
-       toast.error(errormessage);
+  setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
+
     
   }
     finally {
@@ -203,7 +226,12 @@ const markAsPaid = async (id) => {
       error.response?.data?.message ||
       'Failed to Undo member';
 
-    toast.error(errormessage);
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
+
   }
   finally {
     setLoadingId(null);
@@ -229,8 +257,12 @@ const markAsPaid = async (id) => {
       error.response?.data?.error ||
       error.response?.data?.message ||
       'Failed to delete member';
+  setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
 
-    toast.error(errormessage);
   }
    finally {
     setLoadingId(null);
@@ -253,7 +285,12 @@ const handleUpdateMember = async (updatedData) => {
         m.id === updatedData.id ? { ...m, ...updatedData } : m
       )
     );
-    toast.success('Member updated successfully!');
+     setSnackbar({
+  open: true,
+  message:'Member updated successfully!',
+  severity: "success",
+});
+
     handleCloseEditModal();
   } catch (error) {
     const errormessage =
@@ -261,7 +298,11 @@ const handleUpdateMember = async (updatedData) => {
           error.response?.data?.message ||
          'Failed to update member';
     
-        toast.error(errormessage);
+       setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
   }
   finally {
     setLoading(false);
@@ -627,6 +668,22 @@ onClick={() =>
   }}
   onCancel={() => setConfirmAction({ ...confirmAction, open: false })}
 />
+ <Snackbar
+  open={snackbar.open}
+  autoHideDuration={3000}
+  onClose={handleCloseSnackbar}
+  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+>
+  <MuiAlert
+    elevation={6}
+    variant="filled"
+    onClose={handleCloseSnackbar}
+    severity={snackbar.severity}
+    sx={{ width: '100%' }}
+  >
+    {snackbar.message}
+  </MuiAlert>
+</Snackbar>
 
     </Box>
   );

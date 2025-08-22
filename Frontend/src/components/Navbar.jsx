@@ -18,6 +18,9 @@ import { useAuth } from '../context/AuthContext.jsx';
 import CloseIcon from '@mui/icons-material/Close'; 
 const API = import.meta.env.VITE_API_URL;
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 const Navbar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,6 +30,15 @@ const Navbar = () => {
   const { logout, isLoggedIn } = useAuth();
 
   const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+      open: false,
+      message: '',
+      severity: 'success', 
+    });
+    
+    const handleCloseSnackbar = () => {
+      setSnackbar({ ...snackbar, open: false });
+    };
 
   const handleLogout = async () => {
     try {
@@ -42,7 +54,11 @@ const Navbar = () => {
       );
 
       logout();
-      toast.success('Logged out successfully.');
+       setSnackbar({
+  open: true,
+  message: 'Logged out successfully.',
+  severity: "success",
+});
       navigate('/');
 
     } catch (error) {
@@ -229,181 +245,24 @@ const Navbar = () => {
         open={openProfileModal}
         handleClose={() => setOpenProfileModal(false)}
       />
+       <Snackbar
+            open={snackbar.open}
+            autoHideDuration={3000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          >
+            <MuiAlert
+              onClose={handleCloseSnackbar}
+              severity={snackbar.severity}
+              elevation={6}
+              variant="filled"
+              sx={{ width: '100%' }}
+            >
+              {snackbar.message}
+            </MuiAlert>
+          </Snackbar>
     </Box>
   );
 };
 
 export default Navbar;
-
-
-//ICON CODE
-
-//import React, { useState } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import {
-//   useMediaQuery,
-//   Box,
-//   Stack,
-//   Button,
-//   IconButton,
-//   CircularProgress
-// } from '@mui/material';
-// import Logo from '../assets/images/logo.png';
-// import HomeIcon from '@mui/icons-material/Home';
-// import DashboardIcon from '@mui/icons-material/Dashboard';
-// import PersonIcon from '@mui/icons-material/Person';
-// import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-// // import LoginIcon from '@mui/icons-material/Login';
-// import ProfileModal from '../Modal/ProfileModal.jsx';
-// import axios from 'axios';
-// import { toast } from 'react-toastify';
-// import { useAuth } from '../context/AuthContext.jsx';
-// const API = import.meta.env.VITE_API_URL;
-
-// const Navbar = () => {
-//   const [loading, setLoading] = useState(false);
-//   const navigate = useNavigate();
-//   const { logout, isLoggedIn } = useAuth();
-
-//   const [openProfileModal, setOpenProfileModal] = useState(false);
-
-//   const handleLogout = async () => {
-//     try {
-//       setLoading(true);
-//       await axios.post(`${API}/auth/logout`, {}, {
-//         headers: {
-//           'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
-//         },
-//       });
-
-//       logout();
-//       toast.success('Logged out successfully.');
-//       navigate('/');
-//     } catch (error) {
-//       console.error('Logout failed:', error);
-//     } finally {
-//       setLoading(false); // stop loading
-//     }
-//   };
-
-//   const handleLogoClick = () => {
-//     if (isLoggedIn) {
-//       navigate('/user');
-//     } else {
-//       navigate('/');
-//     }
-//   };
-
-//   const guestNavItems = [
-//     { icon: <HomeIcon />, link: '/' },
-//     { icon: <PersonIcon />, link: '/login' },
-//   ];
-
-//   const loggedInNavItems = [
-//     { icon: <HomeIcon />, link: '/user' },
-//     // { icon: <DashboardIcon />, link: '/dashboard' },
-//     { icon: <PersonIcon />, action: () => setOpenProfileModal(true) },
-//     { icon: <ExitToAppIcon />, action: handleLogout },
-//   ];
-
-//   const renderNavButtons = () => {
-//     const items = isLoggedIn ? loggedInNavItems : guestNavItems;
-
-//     return items.map((item) =>
-//       item.link ? (
-//         <IconButton
-//           key={item.link}
-//           component={Link}
-//           to={item.link}
-//           sx={{
-//             color: '#aaa',
-//             fontSize: '24px',
-//             '&:hover': { color: '#d32f2f' },
-//           }}
-//         >
-//           {item.icon}
-//         </IconButton>
-//       ) : item.text === 'Logout' && loading ? (
-//         <IconButton
-//           key={item.text}
-//           disabled
-//           sx={{
-//             color: '#aaa',
-//             fontSize: '24px',
-//           }}
-//         >
-//           <CircularProgress size={20} sx={{ color: '#fff' }} />
-//         </IconButton>
-//       ) : (
-//         <IconButton
-//           key={item.text}
-//           onClick={() => {
-//             item.action();
-//           }}
-//           sx={{
-//             color: '#aaa',
-//             fontSize: '24px',
-//             '&:hover': { color: '#d32f2f' },
-//           }}
-//         >
-//           {item.icon}
-//         </IconButton>
-//       )
-//     );
-//   };
-
-//   return (
-//     <Box
-//       sx={{
-//         backgroundColor: '#000',
-//         px: { xs: 2, sm: 4 },
-//         py: 2,
-//         boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-//         position: 'sticky',
-//         top: 0,
-//         zIndex: 1000,
-//       }}
-//     >
-//       <Stack
-//         direction="row"
-//         alignItems="center"
-//         justifyContent="space-between"
-//         spacing={2}
-//       >
-//         <Box onClick={handleLogoClick} sx={{ cursor: 'pointer' }}>
-//           <img
-//             src={Logo}
-//             alt="logo"
-//             style={{
-//               width: '48px',
-//               height: '48px',
-//               transition: 'transform 0.3s ease-in-out',
-//               filter: 'brightness(0.7)',
-//               objectFit: 'cover',
-//               borderRadius: '20%',
-//             }}
-//             onMouseOver={(e) =>
-//               (e.currentTarget.style.transform = 'scale(1.1)')
-//             }
-//             onMouseOut={(e) =>
-//               (e.currentTarget.style.transform = 'scale(1)')
-//             }
-//           />
-//         </Box>
-
-//         <Stack direction="row" spacing={2} alignItems="center">
-//           {renderNavButtons()}
-//         </Stack>
-//       </Stack>
-
-//       {/* Modals */}
-//       <ProfileModal
-//         open={openProfileModal}
-//         handleClose={() => setOpenProfileModal(false)}
-//       />
-//     </Box>
-//   );
-// };
-
-// export default Navbar;
-

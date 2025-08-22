@@ -31,6 +31,9 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 import ConfirmModal from '../../Modal/ConfirmModal';
 
 const MemberTableMobile = () => {
@@ -44,6 +47,17 @@ const MemberTableMobile = () => {
   const [loading, setLoading] = React.useState(false);
   const [loadingId, setLoadingId] = React.useState(null);
 const [loadingType, setLoadingType] = React.useState('');
+
+  const [snackbar, setSnackbar] = React.useState({
+  open: false,
+  message: '',
+  severity: 'success', 
+});
+const handleCloseSnackbar = () => {
+  setSnackbar({ ...snackbar, open: false });
+};
+
+
 
 const [confirmAction, setConfirmAction] = 
 React.useState({ open: false, title: '', description: '', onConfirm: null });
@@ -64,14 +78,19 @@ React.useState({ open: false, title: '', description: '', onConfirm: null });
            lastPaidDate:  dayjs(m.lastPaidDate).format('DD MMMM YYYY')
         }))
       );
-      toast.info(res.data.message);
+
     } catch (error) {
     const errormessage =
       error.response?.data?.error ||
       error.response?.data?.message ||
       'Failed to get members';
 
-    toast.error(errormessage);
+   
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
   }
    finally {
     setLoading(false);
@@ -91,7 +110,7 @@ React.useState({ open: false, title: '', description: '', onConfirm: null });
         `${API}/members/${id}/pay`,
         {},
         { headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Send token from localStorage
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,  
   } }
       );
       setData((prev) =>
@@ -112,7 +131,12 @@ React.useState({ open: false, title: '', description: '', onConfirm: null });
       error.response?.data?.message ||
       'Failed to mark member';
 
-    toast.error(errormessage);
+   
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
   }
  finally {
     setLoadingId(null);
@@ -152,7 +176,12 @@ React.useState({ open: false, title: '', description: '', onConfirm: null });
       error.response?.data?.message ||
       'Failed to undo member';
 
-    toast.error(errormessage);
+   
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
   }
    finally {
     setLoadingId(null);
@@ -176,7 +205,12 @@ React.useState({ open: false, title: '', description: '', onConfirm: null });
       error.response?.data?.message ||
       'Failed to delete member';
 
-    toast.error(errormessage);
+   
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
   }
    finally {
     setLoadingId(null);
@@ -211,14 +245,23 @@ React.useState({ open: false, title: '', description: '', onConfirm: null });
           m.id === updatedData.id ? { ...m, ...updatedData } : m
         )
       );
-      toast.success('Member updated successfully!');
+          setSnackbar({
+  open: true,
+  message:'Member updated successfully!',
+  severity: "success",
+});
       handleCloseEditModal();
     } catch (error) {
-      const errMsg =
+      const errormessage =
         error.response?.data?.error ||
         error.response?.data?.message ||
         'Failed to update member';
-      toast.error(errMsg);
+    
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
     }
     finally {
     setLoading(false);
@@ -466,6 +509,22 @@ React.useState({ open: false, title: '', description: '', onConfirm: null });
         }}
         onCancel={() => setConfirmAction({ ...confirmAction, open: false })}
       />
+       <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </MuiAlert>
+      </Snackbar>
       
     </Box>
   );

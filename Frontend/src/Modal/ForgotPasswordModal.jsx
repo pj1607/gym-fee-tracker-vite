@@ -16,6 +16,10 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import isEmail from 'validator/lib/isEmail';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+
 const API = import.meta.env.VITE_API_URL;
 
 const modalStyle = {
@@ -43,6 +47,16 @@ const ForgotPasswordModal = ({ open, onClose }) => {
   const [timer, setTimer] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
 
+   const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success', 
+  });
+  
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+  
   useEffect(() => {
     if (timer > 0) {
       const id = setInterval(() => {
@@ -62,21 +76,46 @@ const ForgotPasswordModal = ({ open, onClose }) => {
   const handleNext = async () => {
     try {
       if (step === 1) {
-        if (!email) return toast.info('Please enter your email');
+        if (!email) return setSnackbar({
+    open: true,
+    message: 'Please enter your email',
+    severity: "info",
+  });;
 
       if (!isEmail(email)) {
-  return toast.error('Please enter a valid email address');
+  return setSnackbar({
+    open: true,
+    message: 'Please enter a valid email address',
+    severity: "error",
+  });;
+  
 }
         setLoading(true);
         await axios.post(`${API}/auth/send-otp`, { email });
-        toast.success('OTP sent to your email');
+
+          setSnackbar({
+  open: true,
+  message: 'OTP sent to your email',
+  severity: "success",
+});
+
         setStep(2);
         startOtpTimer();
       } else if (step === 2) {
-        if (!otp) return toast.info('Please enter OTP');
+        if (!otp) return setSnackbar({
+  open: true,
+  message:'Please enter OTP',
+  severity: "info",
+});;
         setLoading(true);
         await axios.post(`${API}/auth/check-otp`, { email, otp });
-        toast.success('OTP verified');
+        toast.success();
+          setSnackbar({
+  open: true,
+  message:'OTP verified',
+  severity: "success",
+});
+
         setStep(3);
       }
     } catch (err) {
@@ -89,14 +128,22 @@ const ForgotPasswordModal = ({ open, onClose }) => {
 
   const handleSubmit = async () => {
     try {
-      if (!newPassword) return toast.info('Please enter a new password');
+      if (!newPassword) return  setSnackbar({
+  open: true,
+  message: 'Please enter a new password',
+  severity: "info",
+});
       const trimmedEmail = email.trim();
       const trimmedNewPassword = newPassword.trim();
       const trimmedConfirNewPassword = confirmNewPassword.trim();
 
       if (trimmedNewPassword !== trimmedConfirNewPassword) {
-        toast.error('Passwords do not match.');
-        return;
+         setSnackbar({
+    open: true,
+    message: "Passwords do not match.",
+    severity: "error",
+  });
+  return;
       }
 
       setLoading(true);
@@ -106,11 +153,19 @@ const ForgotPasswordModal = ({ open, onClose }) => {
         confirmNewPassword: trimmedConfirNewPassword,
       });
 
-      toast.success('Password reset successful!');
+      setSnackbar({
+  open: true,
+  message: 'Password reset successful!',
+  severity: "success",
+});
       handleClose();
     } catch (error) {
       console.error(error);
-      toast.error(error?.response?.data?.error || 'Failed to reset password');
+        setSnackbar({
+    open: true,
+    message: error?.response?.data?.error || 'Failed to reset password',
+    severity: "error",
+  });
     } finally {
       setLoading(false);
     }
@@ -120,10 +175,21 @@ const ForgotPasswordModal = ({ open, onClose }) => {
     try {
       setLoading(true);
       await axios.post(`${API}/auth/send-otp`, { email });
-      toast.success('OTP resent successfully');
+     
+       setSnackbar({
+  open: true,
+  message: 'OTP resent successfully',
+  severity: "success",
+});
       startOtpTimer();
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Failed to resend OTP');
+      toast.error();
+
+       setSnackbar({
+    open: true,
+    message:err?.response?.data?.message || 'Failed to resend OTP',
+    severity: "error",
+  });
     } finally {
       setLoading(false);
     }
@@ -143,6 +209,7 @@ const ForgotPasswordModal = ({ open, onClose }) => {
   };
 
   return (
+    <>
     <Modal open={open} onClose={handleClose}>
       <Box sx={modalStyle}>
         <IconButton
@@ -279,8 +346,28 @@ const ForgotPasswordModal = ({ open, onClose }) => {
             </Button>
           </>
         )}
+
       </Box>
+     
     </Modal>
+     <Snackbar
+      open={snackbar.open}
+      autoHideDuration={3000}
+      onClose={handleCloseSnackbar}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+    >
+      <MuiAlert
+        onClose={handleCloseSnackbar}
+        severity={snackbar.severity}
+        elevation={6}
+        variant="filled"
+        sx={{ width: '100%' }}
+      >
+        {snackbar.message}
+      </MuiAlert>
+    </Snackbar>
+    
+    </>
   );
 };
 

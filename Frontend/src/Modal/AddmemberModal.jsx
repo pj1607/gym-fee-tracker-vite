@@ -16,6 +16,10 @@ import dayjs from 'dayjs';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+
 const API = import.meta.env.VITE_API_URL;
 
 const AddMemberModal = ({ open, handleClose }) => {
@@ -25,6 +29,18 @@ const AddMemberModal = ({ open, handleClose }) => {
   const [lastPaidDate, setLastPaidDate] = useState(dayjs());
   const [unpaidFor, setUnpaidFor] = useState('0');
   const [loading, setLoading] = useState(false);
+
+    const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success', 
+  });
+  
+const handleCloseSnackbar = () => {
+  setSnackbar({ ...snackbar, open: false });
+};
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,22 +71,38 @@ const AddMemberModal = ({ open, handleClose }) => {
         setLastPaidDate(dayjs());
         setUnpaidFor('0');
         handleClose();
-        toast.success("member added successfully");
+  
+         setSnackbar({
+  open: true,
+  message: "member added successfully",
+  severity: "success",
+});
+
       } else {
-        toast.error('Failed to add member.');
+       
+        setSnackbar({
+  open: true,
+  message:'Failed to add member.',
+  severity: "error",
+});
       }
     } catch (error) {
       const errormessage =
         error.response?.data?.error ||
         error.response?.data?.message ||
         'Something went wrong';
-      toast.error(errormessage);
+     setSnackbar({
+  open: true,
+  message: errormessage,
+  severity: "error",
+});
     } finally {
       setLoading(false);
     }
   };
 
   return (
+    <>
     <Modal open={open} onClose={handleClose}>
       <Box
         sx={{
@@ -298,8 +330,28 @@ const AddMemberModal = ({ open, handleClose }) => {
             )}
           </Button>
         </form>
+   
+
       </Box>
     </Modal>
+       <Snackbar
+  open={snackbar.open}
+  autoHideDuration={3000}
+  onClose={handleCloseSnackbar}
+  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+>
+  <MuiAlert
+    onClose={handleCloseSnackbar}
+    severity={snackbar.severity}
+    elevation={6}
+    variant="filled"
+    sx={{ width: '100%' }}
+  >
+    {snackbar.message}
+  </MuiAlert>
+</Snackbar>
+
+</>
   );
 };
 
