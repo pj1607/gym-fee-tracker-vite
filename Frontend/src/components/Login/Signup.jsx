@@ -69,6 +69,15 @@ const handleCloseSnackbar = () => {
       const trimmedPassword = formData.password.trim();
       const trimmedConfirmPassword = formData.confirmPassword.trim();
 
+        if (!trimmedEmail || !trimmedUsername || !trimmedPassword || !trimmedConfirmPassword ){
+       setSnackbar({
+    open: true,
+    message: 'Please fill in all the required details.',
+    severity: "error",
+  });
+  return;
+    }
+
 if (trimmedPassword !== trimmedConfirmPassword) {
   setSnackbar({
     open: true,

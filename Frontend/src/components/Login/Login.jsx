@@ -71,6 +71,16 @@ const Login = () => {
     const trimmedEmail = formData.email.trim();
       const trimmedPassword = formData.password.trim();
 
+      
+    if (!trimmedEmail || !trimmedPassword) {
+       setSnackbar({
+    open: true,
+    message: 'Please fill in all the required details.',
+    severity: "error",
+  });
+  return;
+    }
+
     setLoading(true);
     const response = await axios.post(
        `${API}/auth/login`,
