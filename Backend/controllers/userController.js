@@ -13,12 +13,6 @@ export const registerUser = async (req, res) => {
     const password = req.body.password;
     const confirmpassword = req.body.confirmpassword;
 
-    if (!username || !email || !password || !confirmpassword ){
-      return res.status(400).json({
-        error: 'Please fill in all the required details.',
-        success: 'no'
-      });
-    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -87,13 +81,6 @@ export const loginUser = async (req, res) => {
   try {
     const email = req.body.email?.trim();
     const password = req.body.password;
-
-    if (!email || !password) {
-      return res.status(400).json({
-        error: 'Please fill in all the required details.',
-        success: 'no'
-      });
-    }
 
     const user = await User.findOne({ email });
 
