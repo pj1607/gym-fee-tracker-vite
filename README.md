@@ -3,8 +3,6 @@
 Track your gym members and their payment status.
 Go digital — skip the register!
 
-[Live Preview](https://gym-fee-tracker.vercel.app/)
-
 ##  Features
 - Member registration
 - Automatic monthly fee updates
