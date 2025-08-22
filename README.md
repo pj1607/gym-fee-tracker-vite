@@ -12,6 +12,6 @@ Go digital — skip the register!
 
 ---
 
-## 📸 Preview
+## Preview
 
 ![App Screenshot](/Frontend/src/assets/images/gym-fee-tracker-preview.png)
