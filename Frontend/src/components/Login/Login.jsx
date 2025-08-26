@@ -117,6 +117,33 @@ const Login = () => {
   }
 };
 
+  const handleDemoLogin = async () => {
+  try {
+    const res = await axios.post(`${API}/auth/demo-login`, {
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const { token, username} = res.data.data;
+
+    login(token, username);
+    setSnackbar({
+    open: true,
+    message: 'Welcome as a demo user',
+    severity: "success",
+  });
+    navigate('/user', { replace: true }); 
+
+  
+
+  } catch (error) {
+    console.error("Demo login failed", error);
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      'Demo login failed.';
+    toast.error(message);
+  }
+};
 
   return (
      <Box>
@@ -307,6 +334,29 @@ const Login = () => {
         >
           Forgot Password?
         </Button>
+        {/* Demo Login Button */}
+<Box mt={2} display="flex" justifyContent="center">
+  <Button
+    onClick={handleDemoLogin}
+    variant="outlined"
+    fullWidth
+    sx={{
+      maxWidth: '320px',
+      borderRadius: '6px',
+      fontWeight: 'bold',
+      textTransform: 'none',
+      borderColor: '#555',
+      color: '#fff',
+      backgroundColor: '#2c2c2c',
+      '&:hover': {
+        backgroundColor: '#333',
+        borderColor: '#777',
+      },
+    }}
+  >
+    Continue as Demo User
+  </Button>
+</Box>
 
         <ForgotPasswordModal open={modalOpen} onClose={() => setModalOpen(false)} />
       </Paper>

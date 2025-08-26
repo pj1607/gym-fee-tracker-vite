@@ -6,7 +6,7 @@ const PublicRoute = ({ children }) => {
 
   if (loading) return <div>Loading...</div>;
 
-  return isLoggedIn ? <Navigate to="/dashboard" /> : children;
+  return isLoggedIn ? <Navigate to="/user" /> : children;
 };
 
 export default PublicRoute;

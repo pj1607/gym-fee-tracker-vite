@@ -8,7 +8,7 @@ import User from './Pages/Userpage.jsx';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import CssBaseline from '@mui/material/CssBaseline';
-import "react-toastify/dist/ReactToastify.css"; 
+import { Toaster } from 'react-hot-toast';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PublicRoute from './components/PublicRoute.jsx';
@@ -34,10 +34,12 @@ export const App = () => {
           flexDirection: 'column',
         }}
       >
-        <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        theme="dark"
+        <Toaster 
+        position="top-center" 
+        reverseOrder={false} 
+        toastOptions={{
+          duration: 2000,
+        }} 
       />
         <Navbar />
 
