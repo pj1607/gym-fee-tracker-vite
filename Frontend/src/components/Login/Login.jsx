@@ -367,7 +367,7 @@ const Login = () => {
   {demoLoading ? (
     <CircularProgress size={24} sx={{ color: 'white' }} />
   ) : (
-    "Continue as Demo User"
+    "Try as Demo User"
   )}
 </Button>
 
