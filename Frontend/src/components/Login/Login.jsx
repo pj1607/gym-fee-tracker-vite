@@ -40,6 +40,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
    const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -119,6 +120,7 @@ const Login = () => {
 
   const handleDemoLogin = async () => {
   try {
+     setDemoLoading(true); 
     const res = await axios.post(`${API}/auth/demo-login`, {
       headers: { "Content-Type": "application/json" }
     });
@@ -141,7 +143,14 @@ const Login = () => {
       error.response?.data?.message ||
       error.response?.data?.error ||
       'Demo login failed.';
-    toast.error(message);
+      setSnackbar({
+    open: true,
+    message: 'message',
+    severity: "error",
+  });
+  }
+  finally {
+    setDemoLoading(false);
   }
 };
 
@@ -336,26 +345,32 @@ const Login = () => {
         </Button>
         {/* Demo Login Button */}
 <Box mt={2} display="flex" justifyContent="center">
-  <Button
-    onClick={handleDemoLogin}
-    variant="outlined"
-    fullWidth
-    sx={{
-      maxWidth: '320px',
-      borderRadius: '6px',
-      fontWeight: 'bold',
-      textTransform: 'none',
-      borderColor: '#555',
-      color: '#fff',
-      backgroundColor: '#2c2c2c',
-      '&:hover': {
-        backgroundColor: '#333',
-        borderColor: '#777',
-      },
-    }}
-  >
-    Continue as Demo User
-  </Button>
+<Button
+  onClick={handleDemoLogin}
+  variant="outlined"
+  fullWidth
+  disabled={demoLoading}
+  sx={{
+    maxWidth: '320px',
+    borderRadius: '6px',
+    fontWeight: 'bold',
+    textTransform: 'none',
+    borderColor: '#555',
+    color: '#fff',
+    backgroundColor: '#2c2c2c',
+    '&:hover': {
+      backgroundColor: '#333',
+      borderColor: '#777',
+    },
+  }}
+>
+  {demoLoading ? (
+    <CircularProgress size={24} sx={{ color: 'white' }} />
+  ) : (
+    "Continue as Demo User"
+  )}
+</Button>
+
 </Box>
 
         <ForgotPasswordModal open={modalOpen} onClose={() => setModalOpen(false)} />
