@@ -295,3 +295,32 @@ export const getProfile = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+export const demoLogin = async (req, res) => {
+  try {
+
+    const demoUser = await User.findOne({email:"demo@gmail.com"});
+
+    if (!demoUser) {
+      return res.status(404).json({ error: "Demo user not found" });
+    }
+
+    const token = jwt.sign(
+      { id: demoUser._id},
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      message: "Demo login successful",
+      data: {
+        id: demoUser._id,
+        username: demoUser.username,
+        email: demoUser.email,
+        token,
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
