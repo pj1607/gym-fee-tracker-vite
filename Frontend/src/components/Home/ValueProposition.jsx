@@ -77,7 +77,7 @@ const ValueProposition = () => {
           <NotificationsActiveIcon fontSize="large" color="error" />
           <Typography fontWeight="600" color="white">Smart Fee Reminders</Typography>
           <Typography variant="body2" sx={{ color: '#ccc' }}>
-            Know instantly who hasn't paid — no need to ask!
+            Know instantly who hasn't paid - no need to ask!
           </Typography>
         </Stack>
 
