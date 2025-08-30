@@ -48,7 +48,7 @@ const HeroWithSteps = () => {
         >
           Track your gym members and their payment status.
           <br />
-          Go digital — skip the register!
+          Go digital - skip the register!
         </Typography>
         <Box>
           
