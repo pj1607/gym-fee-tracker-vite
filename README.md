@@ -1,7 +1,7 @@
 # Gym Fee Tracker
 
 Track your gym members and their payment status.
-Go digital — skip the register!
+Go digital -- skip the register!
 
 ##  Features
 - Member registration
