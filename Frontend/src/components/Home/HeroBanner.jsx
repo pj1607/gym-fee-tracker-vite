@@ -155,7 +155,7 @@ const HeroWithSteps = () => {
     display: { xs: 'none', sm: 'block' }
   }}
 >
-  Mark who has paid and who hasn't — instantly.
+  Mark who has paid and who hasn't - instantly.
 </Typography>
 
           </Stack>
