@@ -35,7 +35,7 @@ const googleClientSecret = process.env.NODE_ENV === 'production'
   : process.env.GOOGLE_CLIENT_SECRET_LOCAL;
 
   const googleCallbackURL = process.env.NODE_ENV === 'production'
-  ? 'https://gym-fee-tracker-vite.onrender.com/auth/google/callback'
+  ? 'https://gym-fee-tracker-vite-31pd.onrender.com/auth/google/callback'
   : 'http://localhost:4000/auth/google/callback';
 
 
