@@ -232,16 +232,6 @@ export const resetPassword = async (req, res) => {
 };
 
 
-//LOGOUT
-export const logoutUser = (req, res) => {
-  res.clearCookie('token', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-  });
-
-  return res.status(200).json({ message: 'Logged out successfully', success: true });
-};
 
 // UPDATE PROFILE with validation
 export const updateProfile = async (req, res) => {
