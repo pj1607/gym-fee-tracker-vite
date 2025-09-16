@@ -43,7 +43,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       setLoading(true);
-
       logout();
        setSnackbar({
   open: true,
