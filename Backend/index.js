@@ -3,14 +3,13 @@ import dotenv from 'dotenv';
 import connectDB from './config/conn.js';
 import memberRoutes from './routes/memberRoutes.js';
 import userRoutes from './routes/userRoutes.js'; 
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cookieParser());
+
 
 connectDB();
 

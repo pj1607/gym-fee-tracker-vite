@@ -105,9 +105,10 @@ export const updatePaymentStatus = async (req, res) => {
       {
         previousUnpaidMonths: member.unpaidFor,
         previousLastPaidDate: member.lastPaidDate,
+        
         status: "Paid",
         lastPaidDate: new Date(),
-        unpaidMonths: 0
+        unpaidFor: 0
       },
       { new: true }
     );
@@ -136,7 +137,7 @@ export const undoPaymentStatus = async (req, res) => {
       { _id: objectId, createdBy: req.user._id },
       {
         status: "Unpaid",
-        unpaidMonths: member.previousUnpaidMonths ?? 0,
+        unpaidFor: member.previousUnpaidMonths ?? 0,
         lastPaidDate: member.previousLastPaidDate ?? dayjs().format('DD MMMM YYYY')
       },
       { new: true }
