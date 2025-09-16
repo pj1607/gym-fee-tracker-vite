@@ -43,15 +43,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       setLoading(true);
-      await axios.post(
-        `${API}/auth/logout`,
-        {},
-        {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`, 
-          },
-        }
-      );
 
       logout();
        setSnackbar({
