@@ -1,4 +1,4 @@
-Gym Fee Tracker
+:. Gym Fee Tracker
 ===============
 
 A full-stack web application for local gyms to manage member payments digitally with automatic monthly updates and real-time unpaid status tracking.
